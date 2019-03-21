@@ -24,6 +24,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     int canvasHeight = height();
 
     p.fillRect(0, 0, canvasWidth, canvasHeight, Qt::black);
+    p.setClipRect(0, 0, canvasWidth, canvasHeight);
 
     Painter paint = {&p, canvasWidth, canvasHeight};
     Argument arg {{&paint}};
