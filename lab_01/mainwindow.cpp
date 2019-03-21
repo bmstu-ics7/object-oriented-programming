@@ -23,7 +23,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     int canvasWidth = width() - 200;
     int canvasHeight = height();
 
-    p.fillRect(0, 0, canvasWidth, canvasHeight, Qt::white);
+    p.fillRect(0, 0, canvasWidth, canvasHeight, Qt::black);
 
     Painter paint = {&p, canvasWidth, canvasHeight};
     Argument arg {{&paint}};

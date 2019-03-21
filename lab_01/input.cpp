@@ -33,15 +33,17 @@ Error inputPoint(Point& p, QString str)
 
     int x = 0, y = 0,z = 0;
 
-    if (input(x, get(vec, 0)) ||
-        input(y, get(vec, 1)) ||
+    if (input(x, get(vec, 0)) &&
+        input(y, get(vec, 1)) &&
         input(z, get(vec, 2))) {
-        return incorrectFile;
+        destructVector(vec);
+        p = createPoint(x, y, z);
+
+        return success;
     }
 
-    p = createPoint(x, y, z);
-
-    return success;
+    destructVector(vec);
+    return incorrectFile;
 }
 
 Error inputTwo(int& n1, int& n2, QString str)
@@ -52,10 +54,12 @@ Error inputTwo(int& n1, int& n2, QString str)
     if (size(vec) < 2)
         return incorrectFile;
 
-    if (input(n1, get(vec, 0)) ||
+    if (input(n1, get(vec, 0)) &&
         input(n2, get(vec, 1))) {
-        return incorrectFile;
+        destructVector(vec);
+        return success;
     }
 
-    return success;
+    destructVector(vec);
+    return incorrectFile;
 }

@@ -10,7 +10,7 @@ void drawEdge(Painter& painter, const Edge edge)
     drawPoint(painter, edge.a);
     drawPoint(painter, edge.b);
 
-    painter.paint->setPen(QPen(Qt::black, 1));
+    painter.paint->setPen(QPen(Qt::white, 1));
     painter.paint->drawLine(painter.width  / 2 + get2D(edge.a).first,
                             painter.height / 2 - get2D(edge.a).second,
                             painter.width  / 2 + get2D(edge.b).first,
