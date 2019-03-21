@@ -73,10 +73,14 @@ Error outputFileFigure(const Figure figure, QFile* file)
 
         for (int i = 0; i < size(points); i++) {
             Point& point = get(points, i);
-            if (a.x == point.x && a.y == point.y && a.z == point.z)
+            if (abs(a.x - point.x) <= EPS &&
+                abs(a.y - point.y) <= EPS &&
+                abs(a.z - point.z) <= EPS)
                 aWas = true;
 
-            if (b.x == point.x && b.y == point.y && b.z == point.z)
+            if (abs(b.x - point.x) <= EPS &&
+                abs(b.y - point.y) <= EPS &&
+                abs(b.z - point.z) <= EPS)
                 bWas = true;
 
             if (aWas && bWas)
@@ -107,10 +111,14 @@ Error outputFileFigure(const Figure figure, QFile* file)
         int bIndex = -1;
 
         for (int i = 0; i < size(points); i++) {
-            if (a.x == get(points, i).x && a.y == get(points, i).y && a.z == get(points, i).z)
+            if (abs(a.x - get(points, i).x) <= EPS &&
+                abs(a.y - get(points, i).y) <= EPS &&
+                abs(a.z - get(points, i).z) <= EPS)
                 aIndex = i;
 
-            if (b.x == get(points, i).x && b.y == get(points, i).y && b.z == get(points, i).z)
+            if (abs(b.x - get(points, i).x) <= EPS &&
+                abs(b.y - get(points, i).y) <= EPS &&
+                abs(b.z - get(points, i).z) <= EPS)
                 bIndex = i;
 
             if (aIndex >= 0 && bIndex >= 0)

@@ -11,10 +11,10 @@ void drawEdge(Painter& painter, const Edge edge)
     drawPoint(painter, edge.b);
 
     painter.paint->setPen(QPen(Qt::white, 1));
-    painter.paint->drawLine(painter.width  / 2 + get2D(edge.a).first,
-                            painter.height / 2 - get2D(edge.a).second,
-                            painter.width  / 2 + get2D(edge.b).first,
-                            painter.height / 2 - get2D(edge.b).second);
+    painter.paint->drawLine(painter.width  / 2 + get2D(edge.a).x,
+                            painter.height / 2 - get2D(edge.a).y,
+                            painter.width  / 2 + get2D(edge.b).x,
+                            painter.height / 2 - get2D(edge.b).y);
 }
 
 void offsetEdge(Edge& edge, int dx, int dy, int dz)

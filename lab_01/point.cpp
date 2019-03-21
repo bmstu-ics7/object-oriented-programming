@@ -1,14 +1,16 @@
 #include "point.h"
 
-Point createPoint(int x, int y, int z)
+#include <QDebug>
+
+Point createPoint(double x, double y, double z)
 {
     return {x, y, z};
 }
 
 void drawPoint(Painter& painter, const Point point)
 {
-    int x = get2D(point).first;
-    int y = get2D(point).second;
+    int x = get2D(point).x;
+    int y = get2D(point).y;
 
     painter.paint->setPen(QPen(Qt::white, 1));
     painter.paint->setBrush(QBrush(Qt::white));
@@ -25,7 +27,7 @@ void offsetPoint(Point& point, int dx, int dy, int dz)
     point.z += dz;
 }
 
-int scale(int x, int cx, double k)
+int scale(double x, double cx, double k)
 {
     return int(cx + (x - cx) * k);
 }
@@ -35,11 +37,6 @@ void scalePoint(Point& point, const Point center, double k)
     point.x = scale(point.x, center.x, k);
     point.y = scale(point.y, center.y, k);
     point.z = scale(point.z, center.z, k);
-}
-
-int roundInt(double num)
-{
-    return int(num + 0.5 * (num / num));
 }
 
 void rotatePoint(Point& point, const Point center, int angleX, int angleY, int angleZ)
@@ -57,39 +54,36 @@ void rotatePoint(Point& point, const Point center, int angleX, int angleY, int a
 
     // around x
     Point p = createPoint(point.x, point.y, point.z);
-    point.y = roundInt(cy + (p.y - cy) * cos(ax) + (p.z - cz) * sin(ax));
-    point.z = roundInt(cz - (p.y - cy) * sin(ax) + (p.z - cz) * cos(ax));
-    //y':=y*cos(L)+z*sin(L) ;
-    //z':=-y*sin(L)+z*cos(L) ;
+    point.y = cy + (p.y - cy) * cos(ax) + (p.z - cz) * sin(ax);
+    point.z = cz - (p.y - cy) * sin(ax) + (p.z - cz) * cos(ax);
 
     // around y
     p = createPoint(point.x, point.y, point.z);
-    point.x = roundInt(cx + (p.z - cz) * sin(ay) + (p.x - cx) * cos(ay));
-    point.z = roundInt(cz + (p.z - cz) * cos(ay) - (p.x - cx) * sin(ay));
-    //x'=x*cos(L)+z*sin(L);
-    //z'=-x*sin(L)+z*cos(L);
+    point.x = cx + (p.z - cz) * sin(ay) + (p.x - cx) * cos(ay);
+    point.z = cz + (p.z - cz) * cos(ay) - (p.x - cx) * sin(ay);
 
     // around z
     p = createPoint(point.x, point.y, point.z);
-    point.x = roundInt(cx + (p.x - cx) * cos(az) - (p.y - cy) * sin(az));
-    point.y = roundInt(cy - (p.x - cx) * sin(az) + (p.y - cy) * cos(az));
-    //x'=x*cos(L)-y*sin(L);
-    //y'=-x*sin(L)+y*cos(L);
+    point.x = cx + (p.x - cx) * cos(az) + (p.y - cy) * sin(az);
+    point.y = cy - (p.x - cx) * sin(az) + (p.y - cy) * cos(az);
 }
 
-QPair <int, int> get2D(Point point)
+Point2D createPoint2D(int x, int y)
+{
+    return {x, y};
+}
+
+Point2D get2D(Point point)
 {
     int x = int(point.x + 0.4 * point.z);
     int y = int(point.y + 0.4 * point.z);
-    // int x = int(double(point.x) / point.z);
-    // int y = int(double(point.x) / point.z);
-    return QPair <int, int> (x, y);
+    return createPoint2D(x, y);
 }
 
 Point findCenterPoints(const Point a, const Point b)
 {
-    int x = (a.x + b.x) / 2;
-    int y = (a.y + b.y) / 2;
-    int z = (a.z + b.z) / 2;
+    double x = double(a.x + b.x) / 2;
+    double y = double(a.y + b.y) / 2;
+    double z = double(a.z + b.z) / 2;
     return createPoint(x, y, z);
 }

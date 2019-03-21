@@ -7,16 +7,16 @@ Error action(Argument& argument, Event event)
 
     switch (event) {
     case draw:
-        drawEvent(figure, argument.draw, event);
+        error = drawEvent(figure, argument.draw, event);
         break;
     case offset:
-        changeEvent(figure, argument.change, event);
+        error = changeEvent(figure, argument.change, event);
         break;
     case scale:
-        scaleEvent(figure, argument.scale, event);
+        error = scaleEvent(figure, argument.scale, event);
         break;
     case rotate:
-        changeEvent(figure, argument.change, event);
+        error = changeEvent(figure, argument.change, event);
         break;
     case load:
         error = fileEvent(figure, argument.file, event);

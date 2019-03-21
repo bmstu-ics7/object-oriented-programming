@@ -8,6 +8,8 @@
 #include "error.h"
 #include "input.h"
 
+#define EPS 1e-6
+
 struct Figure
 {
     Vector<Edge> edges;

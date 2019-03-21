@@ -8,17 +8,24 @@
 
 struct Point
 {
-    int x;
-    int y;
-    int z;
+    double x;
+    double y;
+    double z;
 };
 
-Point createPoint(int, int, int);
+struct Point2D
+{
+    int x;
+    int y;
+};
+
+Point createPoint(double, double, double);
 void drawPoint(Painter&, const Point);
 void offsetPoint(Point&, int, int, int);
 void scalePoint(Point&, const Point, double);
 void rotatePoint(Point&, const Point, int, int, int);
-QPair <int, int> get2D(Point);
+Point2D createPoint2D(int, int);
+Point2D get2D(Point);
 Point findCenterPoints(const Point, const Point);
 
 #endif // POINT_H
