@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QThread>
 
 #include "action.h"
 

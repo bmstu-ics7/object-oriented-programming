@@ -48,9 +48,6 @@ void rotatePoint(Point& point, const Point center, int angleX, int angleY, int a
     double cx = center.x;
     double cy = center.y;
     double cz = center.z;
-    cx = 0;
-    cy = 0;
-    cz = 0;
 
     // around x
     Point p = createPoint(point.x, point.y, point.z);
@@ -80,10 +77,17 @@ Point2D get2D(Point point)
     return createPoint2D(x, y);
 }
 
-Point findCenterPoints(const Point a, const Point b)
+double x(const Point point)
 {
-    double x = double(a.x + b.x) / 2;
-    double y = double(a.y + b.y) / 2;
-    double z = double(a.z + b.z) / 2;
-    return createPoint(x, y, z);
+    return point.x;
+}
+
+double y(const Point point)
+{
+    return point.y;
+}
+
+double z(const Point point)
+{
+    return point.z;
 }

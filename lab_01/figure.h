@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QTextStream>
 
+#include "point.h"
 #include "edge.h"
 #include "error.h"
 #include "input.h"
@@ -12,6 +13,7 @@
 
 struct Figure
 {
+    Vector<Point> points;
     Vector<Edge> edges;
 };
 
@@ -23,6 +25,6 @@ void scaleFigure(Figure&, double);
 void rotateFigure(Figure&, int, int, int);
 Point findCenterFigure(const Figure);
 void destructFigure(Figure&);
-void copyFigure(Figure&, const Figure);
+void copyFigure(Figure&, const Figure&);
 
 #endif // FIGURE_H

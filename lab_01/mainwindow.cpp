@@ -27,7 +27,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     p.setClipRect(0, 0, canvasWidth, canvasHeight);
 
     Painter paint = {&p, canvasWidth, canvasHeight};
-    Argument arg {{&paint}};
+    Argument arg {{&paint}, {}, {}, {}};
 
     action(arg, draw);
 }
@@ -38,7 +38,7 @@ void MainWindow::on_bntFile_clicked()
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
 
-    Argument arg {.file = {&file}};
+    Argument arg {{}, {}, {}, {&file}};
 
     if (action(arg, load) != success) {
         QMessageBox::critical(this, "Ошибка", "Файл некорректный");
@@ -55,7 +55,7 @@ void MainWindow::on_btnSave_clicked()
     QFile file(fileName);
     file.open(QIODevice::WriteOnly);
 
-    Argument arg {.file = {&file}};
+    Argument arg {{}, {}, {}, {&file}};
 
     if (action(arg, save) != success) {
         QMessageBox::critical(this, "Ошибка", "Файл не удалось сохранить");
@@ -76,7 +76,7 @@ void MainWindow::on_btnOffset_clicked()
         return;
     }
 
-    Argument arg {.change = {x, y, z}};
+    Argument arg {{}, {x, y, z}, {}, {}};
     action(arg, offset);
 
     repaint();
@@ -94,7 +94,7 @@ void MainWindow::on_btnRotate_clicked()
         return;
     }
 
-    Argument arg {.change = {ax, ay, az}};
+    Argument arg {{}, {ax, ay, az}, {}, {}};
     action(arg, rotate);
 
     repaint();
@@ -110,7 +110,7 @@ void MainWindow::on_btnScale_clicked()
         return;
     }
 
-    Argument arg {.scale = {k}};
+    Argument arg {{}, {}, {k}, {}};
     action(arg, scale);
 
     repaint();

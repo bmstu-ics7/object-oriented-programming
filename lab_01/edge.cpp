@@ -1,41 +1,29 @@
 #include "edge.h"
 
-Edge createEdge(Point a, Point b)
+Edge createEdge(int i1, int i2)
 {
-    return {a, b};
+    return {i1, i2};
 }
 
-void drawEdge(Painter& painter, const Edge edge)
+void drawEdge(Painter& painter, Edge edge, Vector<Point> points)
 {
-    drawPoint(painter, edge.a);
-    drawPoint(painter, edge.b);
+    QPainter* p = painter.paint;
+    int w = painter.width;
+    int h = painter.height;
 
-    painter.paint->setPen(QPen(Qt::white, 1));
-    painter.paint->drawLine(painter.width  / 2 + get2D(edge.a).x,
-                            painter.height / 2 - get2D(edge.a).y,
-                            painter.width  / 2 + get2D(edge.b).x,
-                            painter.height / 2 - get2D(edge.b).y);
+    Point2D p1 = get2D(get(points, edge.i1));
+    Point2D p2 = get2D(get(points, edge.i2));
+
+    p->setPen(QPen(Qt::white, 1));
+    p->drawLine(w / 2 + p1.x, h / 2 - p1.y, w / 2 + p2.x, h / 2 - p2.y);
 }
 
-void offsetEdge(Edge& edge, int dx, int dy, int dz)
+int i1(const Edge edge)
 {
-    offsetPoint(edge.a, dx, dy, dz);
-    offsetPoint(edge.b, dx, dy, dz);
+    return edge.i1;
 }
 
-void scaleEdge(Edge& edge, const Point center, double k)
+int i2(const Edge edge)
 {
-    scalePoint(edge.a, center, k);
-    scalePoint(edge.b, center, k);
-}
-
-void rotateEdge(Edge& edge, const Point center, int ax, int ay, int az)
-{
-    rotatePoint(edge.a, center, ax, ay, az);
-    rotatePoint(edge.b, center, ax, ay, az);
-}
-
-Point findCenterEdge(const Edge edge)
-{
-    return findCenterPoints(edge.a, edge.b);
+    return edge.i2;
 }

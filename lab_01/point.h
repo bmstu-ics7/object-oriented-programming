@@ -26,6 +26,8 @@ void scalePoint(Point&, const Point, double);
 void rotatePoint(Point&, const Point, int, int, int);
 Point2D createPoint2D(int, int);
 Point2D get2D(Point);
-Point findCenterPoints(const Point, const Point);
+double x(const Point);
+double y(const Point);
+double z(const Point);
 
 #endif // POINT_H

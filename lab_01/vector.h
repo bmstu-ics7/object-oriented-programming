@@ -4,7 +4,7 @@
 template <class T>
 struct Vector
 {
-    T* data;
+    T* data = nullptr;
     int count;
     int allocate;
 };
