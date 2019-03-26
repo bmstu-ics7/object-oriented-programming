@@ -5,8 +5,8 @@ template <class T>
 struct Vector
 {
     T* data = nullptr;
-    int count;
-    int allocate;
+    int count = 0;
+    int allocate = 0;
 };
 
 template <class T>

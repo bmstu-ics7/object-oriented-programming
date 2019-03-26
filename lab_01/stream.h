@@ -6,10 +6,12 @@
 #include "point.h"
 #include "vector.h"
 #include "error.h"
+#include "file.h"
 
-Error inputPoints(QTextStream&, Vector<Point>&, Error);
-Error inputEdges(QTextStream&, Vector<Edge>&, Error);
-void outputPoints(QTextStream&, const Vector<Point>);
-void outputEdges(QTextStream&, const Vector<Edge>);
+Error inputPoints(Vector<Point>&, File&);
+Error inputEdges(Vector<Edge>&, File&);
+void outputPoints(File&, const Vector<Point>);
+void outputEdges(File&, const Vector<Edge>);
+Error inputPoint(Point&, File&);
 
 #endif // STREAM_H

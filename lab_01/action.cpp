@@ -3,7 +3,7 @@
 Error action(Argument& argument, Event event)
 {
     Error error = success;
-    static Figure figure;
+    static Figure figure = createFigure();
 
     switch (event) {
     case draw:

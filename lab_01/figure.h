@@ -17,8 +17,9 @@ struct Figure
     Vector<Edge> edges;
 };
 
-Error inputFileFigure(Figure&, QFile*);
-Error outputFileFigure(const Figure, QFile*);
+Figure createFigure();
+Error inputFileFigure(Figure&, File*);
+Error outputFileFigure(const Figure, File*);
 void drawFigure(Painter&, const Figure);
 void offsetFigure(Figure&, int, int, int);
 void scaleFigure(Figure&, double);

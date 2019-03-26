@@ -46,7 +46,7 @@ Error inputPoint(Point& p, QString str)
     return incorrectFile;
 }
 
-Error inputTwo(int& n1, int& n2, QString str)
+Error inputEdge(Edge& edge, QString str)
 {
     Vector<QString> vec;
     split(vec, str);
@@ -54,9 +54,12 @@ Error inputTwo(int& n1, int& n2, QString str)
     if (size(vec) < 2)
         return incorrectFile;
 
+    int n1 = 0, n2 = 0;
+
     if (input(n1, get(vec, 0)) &&
         input(n2, get(vec, 1))) {
         destructVector(vec);
+        edge = createEdge(n1, n2);
         return success;
     }
 

@@ -1,5 +1,10 @@
 #include "figure.h"
 
+Figure createFigure()
+{
+    return {};
+}
+
 Error returnError(Figure& figure, Figure& copy, Error error)
 {
     if (error == success) {
@@ -12,31 +17,35 @@ Error returnError(Figure& figure, Figure& copy, Error error)
     return error;
 }
 
-Error inputFileFigure(Figure& figure, QFile* file)
+Error inputFileFigure(Figure& figure, File* file)
 {
-    if (!file->exists())
+    if (!file->data->exists())
         return fileNotOpen;
 
     Error code = success;
+    Figure f = createFigure();
 
-    Figure copy = figure;
-    figure = {};
+    if (code == success) code = inputPoints(f.points, *file);
+    if (code == success) code = inputEdges(f.edges, *file);
 
-    QTextStream instream(file);
-    code = inputPoints(instream, figure.points, code);
-    code = inputEdges(instream, figure.edges, code);
+    if (code != success) {
+        destructFigure(f);
+        return code;
+    }
 
-    return returnError(figure, copy, code);
+    destructFigure(figure);
+    figure = f;
+
+    return code;
 }
 
-Error outputFileFigure(const Figure figure, QFile* file)
+Error outputFileFigure(const Figure figure, File* file)
 {
-    if (!file->exists())
+    if (!file->data->exists())
         return fileNotOpen;
 
-    QTextStream outstream(file);
-    outputPoints(outstream, figure.points);
-    outputEdges(outstream, figure.edges);
+    outputPoints(*file, figure.points);
+    outputEdges(*file, figure.edges);
 
     return success;
 }

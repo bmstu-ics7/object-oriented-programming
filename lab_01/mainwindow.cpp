@@ -35,8 +35,8 @@ void MainWindow::paintEvent(QPaintEvent *)
 void MainWindow::on_bntFile_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this);
-    QFile file(fileName);
-    file.open(QIODevice::ReadOnly);
+    File file;
+    openFile(file, fileName);
 
     Argument arg {{}, {}, {}, {&file}};
 
@@ -44,7 +44,7 @@ void MainWindow::on_bntFile_clicked()
         QMessageBox::critical(this, "Ошибка", "Файл некорректный");
     }
 
-    file.close();
+    closeFile(file);
 
     repaint();
 }
@@ -52,8 +52,8 @@ void MainWindow::on_bntFile_clicked()
 void MainWindow::on_btnSave_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this);
-    QFile file(fileName);
-    file.open(QIODevice::WriteOnly);
+    File file;
+    openFile(file, fileName);
 
     Argument arg {{}, {}, {}, {&file}};
 
@@ -61,7 +61,7 @@ void MainWindow::on_btnSave_clicked()
         QMessageBox::critical(this, "Ошибка", "Файл не удалось сохранить");
     }
 
-    file.close();
+    closeFile(file);
 }
 
 void MainWindow::on_btnOffset_clicked()

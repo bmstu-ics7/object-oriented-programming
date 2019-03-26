@@ -34,7 +34,8 @@ SOURCES += \
     action.cpp \
     actions.cpp \
     input.cpp \
-    stream.cpp
+    stream.cpp \
+    file.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,7 +50,8 @@ HEADERS += \
     vector.h \
     actions.h \
     input.h \
-    stream.h
+    stream.h \
+    file.h
 
 FORMS += \
         mainwindow.ui

@@ -1,66 +1,71 @@
 #include "stream.h"
 
-Error inputPoints(QTextStream& instream, Vector<Point>& points, Error code)
+Error inputPoints(Vector<Point>& p, File& file)
 {
-    QString line = instream.readLine();
+    Error code = success;
     int countPoints = 0;
-    if (!input(countPoints, line))
-        code = incorrectFile;
-
+    code = input(countPoints, file);
+    Vector<Point> points;
     createVector(points);
     for (int i = 0; i < countPoints && code == success; i++) {
-        Point p;
-        line = instream.readLine();
-
-        if (inputPoint(p, line) != success)
-            code = incorrectFile;
-
+        Point p = createPoint(0, 0, 0);
+        code = inputPoint(p, file);
         append(points, p);
     }
 
-    return code;
-}
-
-Error inputEdges(QTextStream& instream, Vector<Edge>& edges, Error code)
-{
-    QString line = instream.readLine();
-    int countEdges = 0;
-    if (!input(countEdges, line) && code == success)
-        code = incorrectFile;
-
-    createVector(edges);
-    for (int i = 0; i < countEdges && code == success; i++) {
-        int i1 = 0, i2 = 0;
-        line = instream.readLine();
-
-        if (inputTwo(i1, i2, line) != success)
-            code = incorrectFile;
-
-        Edge edge = createEdge(i1, i2);
-        append(edges, edge);
+    if (code == success) {
+        destructVector(p);
+        p = points;
     }
 
     return code;
 }
 
-void outputPoints(QTextStream& outstream, const Vector<Point> points)
+Error inputEdges(Vector<Edge>& edges, File& file)
 {
-    outstream << size(points) << endl;
-    for (int i = 0; i < size(points); i++)
-        outstream << int(x(get(points, i)))
-                  << ' '
-                  << int(y(get(points, i)))
-                  << ' '
-                  << int(z(get(points, i)))
-                  << endl;
+    Error code = success;
+    int countEdges = 0;
+    code = input(countEdges, file);
+    Vector<Edge> copy = edges;
+    createVector(edges);
+    for (int i = 0; i < countEdges && code == success; i++) {
+        Edge edge = createEdge(0, 0);
+        code = inputEdge(edge, file);
+        append(edges, edge);
+    }
+
+    if (code != success) {
+        destructVector(edges);
+        edges = copy;
+    } else {
+        destructVector(copy);
+    }
+
+    return code;
 }
 
-void outputEdges(QTextStream& outstream, const Vector<Edge> edges)
+void outputPoints(File& file, const Vector<Point> points)
 {
-    outstream << size(edges) << endl;
-    for (int i = 0; i < size(edges); i++)
-        outstream << i1(get(edges, i))
-                  << ' '
-                  << i2(get(edges, i))
-                  << endl;
+    print(file, size(points));
+    print(file, "\n");
+    for (int i = 0; i < size(points); i++) {
+        print(file, int(x(get(points, i))));
+        print(file, " ");
+        print(file, int(y(get(points, i))));
+        print(file, " ");
+        print(file, int(z(get(points, i))));
+        print(file, "\n");
+    }
+}
+
+void outputEdges(File& file, const Vector<Edge> edges)
+{
+    print(file, size(edges));
+    print(file, "\n");
+    for (int i = 0; i < size(edges); i++) {
+        print(file, i1(get(edges, i)));
+        print(file, " ");
+        print(file, i2(get(edges, i)));
+        print(file, "\n");
+    }
 }

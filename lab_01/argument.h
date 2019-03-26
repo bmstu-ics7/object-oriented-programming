@@ -22,7 +22,7 @@ struct ScaleArg
 
 struct FileArg
 {
-    QFile* file;
+    File* file;
 };
 
 struct Argument
