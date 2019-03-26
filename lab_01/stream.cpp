@@ -1,11 +1,11 @@
 #include "stream.h"
 
-Error inputPoints(Vector<Point>& p, File& file)
+Error inputPoints(Vector<Point>& points, File& file)
 {
     Error code = success;
     int countPoints = 0;
     code = input(countPoints, file);
-    Vector<Point> points;
+    Vector<Point> copy = points;
     createVector(points);
     for (int i = 0; i < countPoints && code == success; i++) {
         Point p = createPoint(0, 0, 0);
@@ -13,9 +13,11 @@ Error inputPoints(Vector<Point>& p, File& file)
         append(points, p);
     }
 
-    if (code == success) {
-        destructVector(p);
-        p = points;
+    if (code != success) {
+        destructVector(points);
+        points = copy;
+    } else {
+        destructVector(copy);
     }
 
     return code;
