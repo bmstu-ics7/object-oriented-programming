@@ -7,7 +7,7 @@
 #include "point.h"
 #include "edge.h"
 #include "error.h"
-#include "input.h"
+#include "stream.h"
 
 #define EPS 1e-6
 

@@ -26,6 +26,10 @@ Error action(Argument& argument, Event event)
         break;
     case exit_:
         destructFigure(figure);
+        break;
+    default:
+        error = unknownEvent;
+        break;
     }
 
     return readError(error);

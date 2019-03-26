@@ -33,7 +33,8 @@ SOURCES += \
     error.cpp \
     action.cpp \
     actions.cpp \
-    input.cpp
+    input.cpp \
+    stream.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,7 +48,8 @@ HEADERS += \
     event.h \
     vector.h \
     actions.h \
-    input.h
+    input.h \
+    stream.h
 
 FORMS += \
         mainwindow.ui

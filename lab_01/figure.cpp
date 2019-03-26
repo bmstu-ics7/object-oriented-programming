@@ -1,7 +1,12 @@
 #include "figure.h"
 
-Error returnError(Figure& figure, const Figure copy, Error error)
+Error returnError(Figure& figure, Figure& copy, Error error)
 {
+    if (error == success) {
+        destructFigure(copy);
+        return error;
+    }
+
     destructFigure(figure);
     figure = copy;
     return error;
@@ -12,46 +17,16 @@ Error inputFileFigure(Figure& figure, QFile* file)
     if (!file->exists())
         return fileNotOpen;
 
+    Error code = success;
+
     Figure copy = figure;
     figure = {};
 
     QTextStream instream(file);
+    code = inputPoints(instream, figure.points, code);
+    code = inputEdges(instream, figure.edges, code);
 
-    QString line = instream.readLine();
-    int countPoints = 0;
-    if (!input(countPoints, line))
-        return returnError(figure, copy, incorrectFile);
-
-    createVector(figure.points);
-    for (int i = 0; i < countPoints; i++) {
-        Point p;
-        line = instream.readLine();
-
-        if (inputPoint(p, line) != success)
-            return returnError(figure, copy, incorrectFile);
-
-        append(figure.points, p);
-    }
-
-    line = instream.readLine();
-    int countEdges = 0;
-    if (!input(countEdges, line))
-        return returnError(figure, copy, incorrectFile);
-
-    createVector(figure.edges);
-    for (int i = 0; i < countEdges; i++) {
-        int i1 = 0, i2 = 0;
-        line = instream.readLine();
-
-        if (inputTwo(i1, i2, line) != success)
-            return returnError(figure, copy, incorrectFile);
-
-        Edge edge = createEdge(i1, i2);
-        append(figure.edges, edge);
-    }
-
-    destructFigure(copy);
-    return success;
+    return returnError(figure, copy, code);
 }
 
 Error outputFileFigure(const Figure figure, QFile* file)
@@ -60,24 +35,8 @@ Error outputFileFigure(const Figure figure, QFile* file)
         return fileNotOpen;
 
     QTextStream outstream(file);
-
-    outstream << size(figure.points) << endl;
-    for (int i = 0; i < size(figure.points); i++) {
-        outstream << int(x(get(figure.points, i)))
-                  << ' '
-                  << int(y(get(figure.points, i)))
-                  << ' '
-                  << int(z(get(figure.points, i)))
-                  << endl;
-    }
-
-    outstream << size(figure.edges) << endl;
-    for (int i = 0; i < size(figure.edges); i++) {
-        outstream << i1(get(figure.edges, i))
-                  << ' '
-                  << i2(get(figure.edges, i))
-                  << endl;
-    }
+    outputPoints(outstream, figure.points);
+    outputEdges(outstream, figure.edges);
 
     return success;
 }
