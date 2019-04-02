@@ -4,9 +4,9 @@
 #include "argument.h"
 #include "event.h"
 
-Error drawEvent(Figure&, DrawArg, Event);
-Error changeEvent(Figure&, ChangeArg, Event);
-Error scaleEvent(Figure&, ScaleArg, Event);
-Error fileEvent(Figure&, FileArg, Event);
+Error drawEvent(Figure& figure, DrawArg argument, Event event);
+Error changeEvent(Figure& figure, ChangeArg argument, Event event);
+Error scaleEvent(Figure& figure, ScaleArg argument, Event event);
+Error fileEvent(Figure& figure, FileArg argument, Event event);
 
 #endif // ACTIONS_H

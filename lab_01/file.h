@@ -15,13 +15,13 @@ struct File
     QTextStream* stream;
 };
 
-void openFile(File&, QString);
-void closeFile(File&);
-Error input(int&, File&);
-void print(File&, int);
-void print(File&, char*);
-void print(File&, const char*);
-Error inputPoint(Point& p, File& file);
-Error inputEdge(Edge&, File&);
+void openFile(File& file, QString filename);
+void closeFile(File& file);
+Error input(int& number, File& file);
+void print(File& file, int number);
+void print(File& file, char* str);
+void print(File& file, const char* str);
+Error inputPoint(Point& point, File& file);
+Error inputEdge(Edge& edge, File& file);
 
 #endif // FILE_H

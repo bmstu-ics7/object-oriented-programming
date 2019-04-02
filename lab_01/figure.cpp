@@ -25,7 +25,7 @@ Error inputFileFigure(Figure& figure, File* file)
     Error code = success;
     Figure f = createFigure();
 
-    if (code == success) code = inputPoints(f.points, *file);
+    code = inputPoints(f.points, *file);
     if (code == success) code = inputEdges(f.edges, *file);
 
     if (code != success) {
@@ -52,6 +52,9 @@ Error outputFileFigure(const Figure figure, File* file)
 
 void drawFigure(Painter& painter, const Figure figure)
 {
+    setBrush(painter);
+    setPen(painter);
+
     for (int i = 0; i < size(figure.points); i++)
         drawPoint(painter, get(figure.points, i));
 

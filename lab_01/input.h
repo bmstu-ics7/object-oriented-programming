@@ -9,10 +9,10 @@
 #include "error.h"
 #include "edge.h"
 
-bool input(int&, QString);
-bool input(double&, QString);
-void split(Vector<QString>&, QString);
-Error inputPoint(Point&, QString);
-Error inputEdge(Edge&, QString);
+bool input(int& number, QString str);
+bool input(double& number, QString str);
+void split(Vector<QString>& vec, QString str);
+Error inputPoint(Point& point, QString str);
+Error inputEdge(Edge& edge, QString str);
 
 #endif // INPUT_H

@@ -8,10 +8,10 @@
 #include "error.h"
 #include "file.h"
 
-Error inputPoints(Vector<Point>&, File&);
-Error inputEdges(Vector<Edge>&, File&);
-void outputPoints(File&, const Vector<Point>);
-void outputEdges(File&, const Vector<Edge>);
-Error inputPoint(Point&, File&);
+Error inputPoints(Vector<Point>& points, File& file);
+Error inputEdges(Vector<Edge>& edges, File& file);
+void outputPoints(File& file, const Vector<Point> points);
+void outputEdges(File& file, const Vector<Edge> edges);
+Error inputPoint(Point& point, File& file);
 
 #endif // STREAM_H

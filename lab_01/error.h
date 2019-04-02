@@ -11,6 +11,6 @@ enum Error
     unknownEvent
 };
 
-Error readError(Error);
+Error readError(Error error);
 
 #endif // ERROR_H

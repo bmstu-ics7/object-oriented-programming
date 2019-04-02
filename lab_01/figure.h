@@ -18,14 +18,14 @@ struct Figure
 };
 
 Figure createFigure();
-Error inputFileFigure(Figure&, File*);
-Error outputFileFigure(const Figure, File*);
-void drawFigure(Painter&, const Figure);
-void offsetFigure(Figure&, int, int, int);
-void scaleFigure(Figure&, double);
-void rotateFigure(Figure&, int, int, int);
-Point findCenterFigure(const Figure);
-void destructFigure(Figure&);
-void copyFigure(Figure&, const Figure&);
+Error inputFileFigure(Figure& figure, File* file);
+Error outputFileFigure(const Figure figure, File* file);
+void drawFigure(Painter& painter, const Figure figure);
+void offsetFigure(Figure& figure, int dx, int dy, int dz);
+void scaleFigure(Figure& figure, double k);
+void rotateFigure(Figure& figure, int ax, int ay, int az);
+Point findCenterFigure(const Figure figure);
+void destructFigure(Figure& figure);
+void copyFigure(Figure& figure, const Figure& copied);
 
 #endif // FIGURE_H

@@ -24,9 +24,9 @@ struct Edge
     int i2;
 };
 
-Edge createEdge(int, int);
-void drawEdge(Painter&, Edge, Vector<Point>);
-int i1(const Edge);
-int i2(const Edge);
+Edge createEdge(int i1, int i2);
+void drawEdge(Painter& painter, Edge edge, Vector<Point> points);
+int i1(const Edge edge);
+int i2(const Edge edge);
 
 #endif // EDGE_H

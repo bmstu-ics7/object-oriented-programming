@@ -11,13 +11,7 @@ void drawPoint(Painter& painter, const Point point)
 {
     int x = get2D(point).x;
     int y = get2D(point).y;
-
-    painter.paint->setPen(QPen(Qt::white, 1));
-    painter.paint->setBrush(QBrush(Qt::white));
-
-    painter.paint->drawEllipse(painter.width  / 2 + x - 2,
-                               painter.height / 2 - y - 2,
-                               4, 4);
+    drawPoint(painter, x, y);
 }
 
 void offsetPoint(Point& point, int dx, int dy, int dz)

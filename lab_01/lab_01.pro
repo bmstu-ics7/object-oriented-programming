@@ -35,7 +35,8 @@ SOURCES += \
     actions.cpp \
     input.cpp \
     stream.cpp \
-    file.cpp
+    file.cpp \
+    paiter.cpp
 
 HEADERS += \
         mainwindow.h \

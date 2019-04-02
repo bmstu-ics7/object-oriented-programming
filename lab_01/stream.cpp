@@ -6,7 +6,7 @@ Error inputPoints(Vector<Point>& points, File& file)
     int countPoints = 0;
     code = input(countPoints, file);
     Vector<Point> copy = points;
-    createVector(points);
+    createVector(points, countPoints);
     for (int i = 0; i < countPoints && code == success; i++) {
         Point p = createPoint(0, 0, 0);
         code = inputPoint(p, file);
@@ -29,7 +29,7 @@ Error inputEdges(Vector<Edge>& edges, File& file)
     int countEdges = 0;
     code = input(countEdges, file);
     Vector<Edge> copy = edges;
-    createVector(edges);
+    createVector(edges, countEdges);
     for (int i = 0; i < countEdges && code == success; i++) {
         Edge edge = createEdge(0, 0);
         code = inputEdge(edge, file);

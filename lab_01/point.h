@@ -19,15 +19,15 @@ struct Point2D
     int y;
 };
 
-Point createPoint(double, double, double);
-void drawPoint(Painter&, const Point);
-void offsetPoint(Point&, int, int, int);
-void scalePoint(Point&, const Point, double);
-void rotatePoint(Point&, const Point, int, int, int);
-Point2D createPoint2D(int, int);
-Point2D get2D(Point);
-double x(const Point);
-double y(const Point);
-double z(const Point);
+Point createPoint(double x, double y, double z);
+void drawPoint(Painter& painter, const Point point);
+void offsetPoint(Point& point, int dx, int dy, int dz);
+void scalePoint(Point& point, const Point center, double k);
+void rotatePoint(Point& point, const Point center, int ax, int ay, int az);
+Point2D createPoint2D(int x, int y);
+Point2D get2D(Point point);
+double x(const Point point);
+double y(const Point point);
+double z(const Point point);
 
 #endif // POINT_H
