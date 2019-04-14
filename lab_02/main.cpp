@@ -39,9 +39,36 @@ int main()
     m3 *= m4;
     cout << m3 << endl;
 
-    Matrix<int> a;
-    cin >> a;
-    cout << a;
+    Matrix<double> d(3);
+
+    d(0, 2) = 4;
+    d(0, 1) = 2;
+    d(1, 0) = 5;
+    d(2, 0) = 1;
+    d(2, 2) = 2;
+
+    cout << d << endl;
+    cout << -d << endl;
+
+    cout << d + 5.0 << endl;
+    cout << d - 5.0 << endl;
+    cout << d * 5.0 << endl;
+    //d.transpositionSelf();
+    cout << d << endl;
+    
+    cout << d * -d << endl;
+    
+    Matrix<double> mat(10);
+    for (int i = 0; i < mat.rows(); ++i)
+        for (int j = 0; j < mat.columns(); ++j)
+            mat(i, j) = rand() % 10;
+        
+    cout << mat << endl;
+    cout << -mat << endl;
+    cout << mat * -mat << endl;
+
+    cout << d << endl;
+    cout << d.determinant() << endl;
 
     return 0;
 }
