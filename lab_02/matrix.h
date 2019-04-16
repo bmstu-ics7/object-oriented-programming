@@ -1,34 +1,41 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef __MATRIX_H
+#define __MATRIX_H
 
 #include <iostream>
 #include <math.h>
 
+#include "basecontainer.h"
+#include "iterator.h"
+#include "exception.h"
+#include "linematrix.h"
+
 template <typename T>
-class Matrix
+class Matrix : public BaseContainer
 {
 public:
     Matrix();
-    Matrix(int n);
-    Matrix(int n, int m);
-    ~Matrix();
+    Matrix(size_t n);
+    Matrix(size_t n, size_t m, T** mat = nullptr);
+    Matrix(std::initializer_list< std::initializer_list<T> > list);
+    ~Matrix() override;
 
-    Matrix(const Matrix<T>& copied);
+    explicit Matrix(const Matrix<T>& copied);
     Matrix(Matrix<T>&& copied);
     Matrix<T>& operator=(const Matrix<T>& copied);
     Matrix<T>& operator=(Matrix<T>&& copied);
 
-    int rows();
-    int columns();
-    int rows() const;
-    int columns() const;
+    int rows() const override;
+    int columns() const override;
 
-    operator bool() const;
+    operator bool() const override;
 
-    const T& get(int i, int j) const;
-    T& get(int i, int j);
-    const T& operator()(int i, int j) const;
-    T& operator()(int i, int j);
+    const T& get(size_t i, size_t j) const;
+    T& get(size_t  i, size_t  j);
+    const T& operator()(size_t  i, size_t  j) const;
+    T& operator()(size_t  i, size_t  j);
+
+    LineMatrix<T> operator[](size_t  i);
+    const LineMatrix<T> operator[](size_t  i) const;
 
     Matrix<T>& addColumn();
     Matrix<T>& addRow();
@@ -37,31 +44,50 @@ public:
     Matrix<T>& additionSelf(const Matrix<T>& mat);
     Matrix<T> operator+(const Matrix<T>& mat);
     Matrix<T>& operator+=(const Matrix<T>& mat);
+    Matrix<T> addition(const Matrix<T>& mat) const;
+    Matrix<T> operator+(const Matrix<T>& mat) const;
 
     Matrix<T> subtraction(const Matrix<T>& mat);
     Matrix<T>& subtractionSelf(const Matrix<T>& mat);
     Matrix<T> operator-(const Matrix<T>& mat);
     Matrix<T>& operator-=(const Matrix<T>& mat);
+    Matrix<T> subtraction(const Matrix<T>& mat) const;
+    Matrix<T> operator-(const Matrix<T>& mat) const;
 
     Matrix<T> multiplication(const Matrix<T>& mat);
     Matrix<T>& multiplicationSelf(const Matrix<T>& mat);
     Matrix<T> operator*(const Matrix<T>& mat);
     Matrix<T>& operator*=(const Matrix<T>& mat);
+    Matrix<T> multiplication(const Matrix<T>& mat) const;
+    Matrix<T> operator*(const Matrix<T>& mat) const;
 
     Matrix<T> addition(const T& element);
     Matrix<T>& additionSelf(const T& element);
     Matrix<T> operator+(const T& element);
     Matrix<T>& operator+=(const T& element);
+    Matrix<T> addition(const T& element) const;
+    Matrix<T> operator+(const T& element) const;
 
     Matrix<T> subtraction(const T& element);
     Matrix<T>& subtractionSelf(const T& element);
     Matrix<T> operator-(const T& element);
     Matrix<T>& operator-=(const T& element);
+    Matrix<T> subtraction(const T& element) const;
+    Matrix<T> operator-(const T& element) const;
 
     Matrix<T> multiplication(const T& element);
     Matrix<T>& multiplicationSelf(const T& element);
     Matrix<T> operator*(const T& element);
     Matrix<T>& operator*=(const T& element);
+    Matrix<T> multiplication(const T& element) const;
+    Matrix<T> operator*(const T& element) const;
+
+    Matrix<T> division(const T& element);
+    Matrix<T>& divisionSelf(const T& element);
+    Matrix<T> operator/(const T& element);
+    Matrix<T>& operator/=(const T& element);
+    Matrix<T> division(const T& element) const;
+    Matrix<T> operator/(const T& element) const;
 
     Matrix<T> inverse();
     Matrix<T> operator-();
@@ -72,12 +98,14 @@ public:
 
     T determinant();
 
+    MatrixIterator<T> begin();
+    MatrixIterator<T> end();
+    ConstMatrixIterator<const T> begin() const;
+    ConstMatrixIterator<const T> end() const;
+
 private:
-    int n;
-    int m;
-    int allocateLen;
-    std::unique_ptr<T[]> data;
-    Matrix<T> getMatrixWithoutRowAndCol(int row, int col);
+    std::shared_ptr<T> data;
+    Matrix<T> getMatrixWithoutRowAndCol(size_t row, size_t col);
 };
 
 template <typename T>
@@ -89,7 +117,7 @@ std::istream& operator>>(std::istream& in, Matrix<T>& matrix)
 
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < m; ++j)
-            in >> matrix(i, j);
+            in >> matrix[i][j];
 
     return in;
 }
@@ -99,7 +127,7 @@ std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix)
 {
     for (int i = 0; i < matrix.rows(); ++i) {
         for (int j = 0; j < matrix.columns(); ++j) {
-            out << matrix(i, j) << '\t';
+            out << matrix[i][j] << '\t';
         }
         out << std::endl;
     }
@@ -111,18 +139,52 @@ template <typename T>
 Matrix<T>::Matrix() : Matrix(0) {}
 
 template <typename T>
-Matrix<T>::Matrix(int n) : Matrix(n, n) {}
+Matrix<T>::Matrix(size_t n) : Matrix(n, n) {}
 
 template <typename T>
-Matrix<T>::Matrix(int n, int m)
+Matrix<T>::Matrix(size_t n, size_t m, T** mat)
 {
     this->n = n;
     this->m = m;
     allocateLen = n * m;
     data.reset(new T[allocateLen]);
 
-    for (int i = 0; i < allocateLen; ++i)
-        data[i] = 0;
+    if (mat == nullptr) {
+        for (int i = 0; i < allocateLen; ++i)
+            data.get()[i] = 0;
+    } else {
+        for (int i = 0; i < n; ++i)
+            for (int j = 0; j < m; ++j)
+                get(i, j) = mat[i][j];
+    }
+}
+
+template <typename T>
+Matrix<T>::Matrix(std::initializer_list< std::initializer_list<T> > list)
+{
+    n = list.size();
+    m = 0;
+    for (std::initializer_list<T> row : list) {
+        if (m < row.size()) {
+            m = row.size();
+        }
+    }
+
+    allocateLen = n * m;
+    data.reset(new T[allocateLen]);
+
+    int i = 0, j = 0;
+
+    for (std::initializer_list<T> row : list) {
+        j = 0;
+        for (T el : row) {
+            get(i, j++) = el;
+        }
+
+        while (j < m) get(i, j++) = 0;
+
+        ++i;
+    }
 }
 
 template <typename T>
@@ -139,9 +201,9 @@ Matrix<T>::Matrix(const Matrix<T>& copied)
     n = copied.n;
     m = copied.m;
     allocateLen = copied.allocateLen;
-    data.reset(new T[allocateLen]);
+    data = std::shared_ptr<T>(new T[allocateLen]);
     for (int i = 0; i < allocateLen; ++i)
-        data[i] = copied.data[i];
+        data.get()[i] = copied.data.get()[i];
 }
 
 template <typename T>
@@ -163,7 +225,7 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& copied)
     data = nullptr;
     data.reset(new T[allocateLen]);
     for (int i = 0; i < allocateLen; ++i)
-        data[i] = copied.data[i];
+        data.get()[i] = copied.data.get()[i];
 
     return *this;
 }
@@ -181,18 +243,6 @@ Matrix<T>& Matrix<T>::operator=(Matrix<T>&& copied)
     data = copied.data;
     copied.data = nullptr;
     return *this;
-}
-
-template <typename T>
-int Matrix<T>::rows()
-{
-    return n;
-}
-
-template <typename T>
-int Matrix<T>::columns()
-{
-    return m;
 }
 
 template <typename T>
@@ -214,27 +264,61 @@ Matrix<T>::operator bool() const
 }
 
 template <typename T>
-T& Matrix<T>::get(int i, int j)
+T& Matrix<T>::get(size_t i, size_t j)
 {
-    return data[i * m + j];
+    if (i * m + j >= allocateLen) {
+        throw IndexException("Index out of range");
+    }
+
+    return *((T*)data.get() + i * m + j);
 }
 
 template <typename T>
-const T& Matrix<T>::get(int i, int j) const
+const T& Matrix<T>::get(size_t i, size_t j) const
 {
-    return data[i * m + j];
+    if (i * m + j >= allocateLen) {
+        throw IndexException("Index out of range");
+    }
+
+    return *((T*)data.get() + i * m + j);
 }
 
 template <typename T>
-T& Matrix<T>::operator()(int i, int j)
+T& Matrix<T>::operator()(size_t i, size_t j)
 {
+    if (i * m + j >= allocateLen) {
+        throw IndexException("Index out of range");
+    }
+
     return get(i, j);
 }
 
 template <typename T>
-const T& Matrix<T>::operator()(int i, int j) const
+const T& Matrix<T>::operator()(size_t i, size_t j) const
 {
+    if (i * m + j >= allocateLen) {
+        throw IndexException("Index out of range");
+    }
+
     return get(i, j);
+}
+
+template <typename T>
+LineMatrix<T> Matrix<T>::operator[](size_t  i)
+{
+    if (i >= n) {
+        throw IndexException("Index out of range");
+    }
+    return LineMatrix<T>(data.get() + i * m, m);
+}
+
+template <typename T>
+const LineMatrix<T> Matrix<T>::operator[](size_t  i) const
+{
+    if (i >= n) {
+        throw IndexException("Index out of range");
+    }
+    return LineMatrix<T>(data.get() + i * m, m);
 }
 
 template <typename T>
@@ -300,6 +384,27 @@ Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& mat)
 }
 
 template <typename T>
+Matrix<T> Matrix<T>::addition(const Matrix<T>& mat) const
+{
+    Matrix<T> res(n, m);
+
+    if (n != mat.n || m != mat.m)
+        return Matrix<T>();
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res(i, j) = this->get(i, j) + mat(i, j);
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator+(const Matrix<T>& mat) const
+{
+    return addition(mat);
+}
+
+template <typename T>
 Matrix<T> Matrix<T>::subtraction(const Matrix<T>& mat)
 {
     Matrix<T> res(n, m);
@@ -337,6 +442,27 @@ template <typename T>
 Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& mat)
 {
     return subtractionSelf(mat);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::subtraction(const Matrix<T>& mat) const
+{
+    Matrix<T> res(n, m);
+
+    if (n != mat.n || m != mat.m)
+        return Matrix<T>();
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res(i, j) = this->get(i, j) - mat(i, j);
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator-(const Matrix<T>& mat) const
+{
+    return subtraction(mat);
 }
 
 template <typename T>
@@ -385,6 +511,28 @@ Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& mat)
 }
 
 template <typename T>
+Matrix<T> Matrix<T>::multiplication(const Matrix<T>& mat) const
+{
+    Matrix<T> res(n, mat.m);
+
+    if (m != mat.n)
+        return Matrix<T>();
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < mat.m; ++j)
+            for (int k = 0; k < m; ++k)
+                res(i, j) += this->get(i, k) * mat(k, j);
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator*(const Matrix<T>& mat) const
+{
+    return multiplication(mat);
+}
+
+template <typename T>
 Matrix<T> Matrix<T>::addition(const T& element)
 {
     Matrix<T> res(n, m);
@@ -416,6 +564,24 @@ template <typename T>
 Matrix<T>& Matrix<T>::operator+=(const T& element)
 {
     return additionSelf(element);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::addition(const T& element) const
+{
+    Matrix<T> res(n, m);
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res(i, j) = this->get(i, j) + element;
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator+(const T& element) const
+{
+    return addition(element);
 }
 
 template <typename T>
@@ -453,6 +619,24 @@ Matrix<T>& Matrix<T>::operator-=(const T& element)
 }
 
 template <typename T>
+Matrix<T> Matrix<T>::subtraction(const T& element) const
+{
+    Matrix<T> res(n, m);
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            res(i, j) = this->get(i, j) - element;
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator-(const T& element) const
+{
+    return subtraction(element);
+}
+
+template <typename T>
 Matrix<T> Matrix<T>::multiplication(const T& element)
 {
     Matrix<T> res(n, m);
@@ -487,6 +671,133 @@ Matrix<T>& Matrix<T>::operator*=(const T& element)
 }
 
 template <typename T>
+Matrix<T> Matrix<T>::multiplication(const T& element) const
+{
+    Matrix<T> res(n, m);
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+                res(i, j) = this->get(i, j) * element;
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator*(const T& element) const
+{
+    return multiplication(element);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::division(const T& element)
+{
+    if (element == 0)
+        throw ArifmeticException("Division by zero");
+
+    Matrix<T> res(n, m);
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+                res(i, j) = this->get(i, j) / element;
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::divisionSelf(const T& element)
+{
+    if (element == 0)
+        throw ArifmeticException("Division by zero");
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+                get(i, j) /= element;
+
+    return *this;
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator/(const T& element)
+{
+    return division(element);
+}
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator/=(const T& element)
+{
+    return divisionSelf(element);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::division(const T& element) const
+{
+    if (element == 0)
+        throw ArifmeticException("Division by zero");
+
+    Matrix<T> res(n, m);
+
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+                res(i, j) = this->get(i, j) / element;
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> Matrix<T>::operator/(const T& element) const
+{
+    return division(element);
+}
+
+template <typename T>
+Matrix<T> operator+(const T& element, const Matrix<T>& matrix)
+{
+    Matrix<T> res(matrix.rows(), matrix.columns());
+
+    for (int i = 0; i < matrix.rows(); ++i)
+        for (int j = 0; j < matrix.columns(); ++j)
+            res(i, j) = matrix(i, j) + element;
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> operator-(const T& element, const Matrix<T>& matrix)
+{
+    Matrix<T> res(matrix.rows(), matrix.columns());
+
+    for (int i = 0; i < matrix.rows(); ++i)
+        for (int j = 0; j < matrix.columns(); ++j)
+            res(i, j) = element - matrix(i, j);
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> operator*(const T& element, const Matrix<T>& matrix)
+{
+    Matrix<T> res(matrix.rows(), matrix.columns());
+
+    for (int i = 0; i < matrix.rows(); ++i)
+        for (int j = 0; j < matrix.columns(); ++j)
+            res(i, j) = matrix(i, j) * element;
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
+Matrix<T> operator/(const T& element, const Matrix<T>& matrix)
+{
+    Matrix<T> res(matrix.rows(), matrix.columns());
+
+    for (int i = 0; i < matrix.rows(); ++i)
+        for (int j = 0; j < matrix.columns(); ++j)
+            res(i, j) = element / matrix(i, j);
+
+    return Matrix<T>(res);
+}
+
+template <typename T>
 Matrix<T> Matrix<T>::inverse()
 {
     if (n != m)
@@ -494,7 +805,7 @@ Matrix<T> Matrix<T>::inverse()
 
     int size = n;
     Matrix<T> ed(size);
-    Matrix<T> mat = *this;
+    Matrix<T> mat = (Matrix<T>)*this;
 
     for (int i = 0; i < size; ++i)
         ed(i, i) = 1;
@@ -589,7 +900,7 @@ T Matrix<T>::determinant()
         return get(0, 0) * get(1, 1) - get(0, 1) * get(1, 0);
 
     for (int i = 0; i < n; ++i) {
-        result += pow(-1, i) * get(0, i) * 
+        result += pow(-1, i) * get(0, i) *
                   getMatrixWithoutRowAndCol(0, i).determinant();
     }
 
@@ -597,10 +908,10 @@ T Matrix<T>::determinant()
 }
 
 template <typename T>
-Matrix<T> Matrix<T>::getMatrixWithoutRowAndCol(int row, int col)
+Matrix<T> Matrix<T>::getMatrixWithoutRowAndCol(size_t row, size_t col)
 {
     Matrix<T> mat(n - 1, m - 1);
-    
+
     for (int i = 0; i < n; ++i) {
         if (i == row)
             continue;
@@ -616,5 +927,29 @@ Matrix<T> Matrix<T>::getMatrixWithoutRowAndCol(int row, int col)
     return Matrix<T>(mat);
 }
 
-#endif // MATRIX_H
+template <typename T>
+MatrixIterator<T> Matrix<T>::begin()
+{
+    return MatrixIterator<T>(data, 0);
+}
+
+template <typename T>
+MatrixIterator<T> Matrix<T>::end()
+{
+    return MatrixIterator<T>(data, allocateLen);
+}
+
+template <typename T>
+ConstMatrixIterator<const T> Matrix<T>::begin() const
+{
+    return ConstMatrixIterator<T>(data, 0);
+}
+
+template <typename T>
+ConstMatrixIterator<const T> Matrix<T>::end() const
+{
+    return ConstMatrixIterator<T>(data, allocateLen);
+}
+
+#endif // __MATRIX_H
 
