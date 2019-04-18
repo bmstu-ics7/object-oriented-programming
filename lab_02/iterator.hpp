@@ -46,13 +46,13 @@ MatrixIterator<T> MatrixIterator<T>::operator--(int)
 template <typename T>
 T& MatrixIterator<T>::operator*() const
 {
-    return data.get()[index];
+    return data.lock().get()[index];
 }
 
 template <typename T>
 T* MatrixIterator<T>::operator->() const
 {
-    return data.get() + index;
+    return data.lock().get() + index;
 }
 
 template <typename T>
@@ -98,13 +98,13 @@ ConstMatrixIterator<T> ConstMatrixIterator<T>::operator--(int)
 template <typename T>
 const T& ConstMatrixIterator<T>::operator*() const
 {
-    return data.get()[index];
+    return data.lock().get()[index];
 }
 
 template <typename T>
 const T* ConstMatrixIterator<T>::operator->() const
 {
-    return data.get() + index;
+    return data.lock().get() + index;
 }
 
 

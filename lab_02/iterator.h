@@ -24,7 +24,7 @@ public:
     T& operator*() const;
     T* operator->() const;
 private:
-    std::shared_ptr<T> data;
+    std::weak_ptr<T> data;
     int index;
 };
 
@@ -46,7 +46,7 @@ public:
     const T& operator*() const;
     const T* operator->() const;
 private:
-    std::shared_ptr<T> data;
+    std::weak_ptr<T> data;
     int index;
 };
 
