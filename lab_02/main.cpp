@@ -31,7 +31,7 @@ int main()
     for (int i = 0; i < m3.rows(); ++i)
         for (int j = 0 ; j < m3.columns(); ++j)
             m3[i][j] = 1;
-    
+
     for (int i = 0; i < m4.rows(); ++i)
         for (int j = 0 ; j < m4.columns(); ++j)
             m4[i][j] = 2;

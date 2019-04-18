@@ -25,6 +25,7 @@ public:
     ArifmeticException(const char* msg) : BaseException(msg) {}
     const char* what() const noexcept override;
 };
+
 class EmptyException : public BaseException
 {
 public: 
