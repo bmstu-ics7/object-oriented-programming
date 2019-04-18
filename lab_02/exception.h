@@ -19,33 +19,17 @@ public:
     const char* what() const noexcept override;
 };
 
-const char* IndexException::what() const noexcept
-{
-    return message;
-}
-
 class ArifmeticException : public BaseException
 {
 public: 
     ArifmeticException(const char* msg) : BaseException(msg) {}
     const char* what() const noexcept override;
 };
-
-const char* ArifmeticException::what() const noexcept
-{
-    return message;
-}
-
 class EmptyException : public BaseException
 {
 public: 
     EmptyException(const char* msg) : BaseException(msg) {}
     const char* what() const noexcept override;
 };
-
-const char* EmptyException::what() const noexcept
-{
-    return message;
-}
 
 #endif // __EXEPTION_H
