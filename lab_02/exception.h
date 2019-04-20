@@ -33,4 +33,11 @@ public:
     const char* what() const noexcept override;
 };
 
+class IteratorException : public BaseException
+{
+public: 
+    IteratorException(const char* msg) : BaseException(msg) {}
+    const char* what() const noexcept override;
+};
+
 #endif // __EXEPTION_H

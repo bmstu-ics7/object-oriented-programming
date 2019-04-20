@@ -18,40 +18,54 @@ bool MatrixIterator<T>::operator==(MatrixIterator const& other) const
 template <typename T>
 MatrixIterator<T>& MatrixIterator<T>::operator++()
 {
-    index++;
+    if (++index > len) {
+        throw IteratorException("Iterator out of range");
+    }
     return *this;
 }
 
 template <typename T>
 MatrixIterator<T> MatrixIterator<T>::operator++(int)
 {
-    index++;
+    if (++index > len) {
+        throw IteratorException("Iterator out of range");
+    }
     return *this;
 }
 
 template <typename T>
 MatrixIterator<T>& MatrixIterator<T>::operator--()
 {
-    index--;
+    if (--index < 0) {
+        throw IteratorException("Iterator out of range");
+    }
     return *this;
 }
 
 template <typename T>
 MatrixIterator<T> MatrixIterator<T>::operator--(int)
 {
-    index--;
+    if (--index < 0) {
+        throw IteratorException("Iterator out of range");
+    }
     return *this;
 }
 
 template <typename T>
 T& MatrixIterator<T>::operator*() const
 {
+    if (data.expired() || data.lock() == nullptr) {
+        throw IteratorException("Object in iterator was deleted");
+    }
     return data.lock().get()[index];
 }
 
 template <typename T>
 T* MatrixIterator<T>::operator->() const
 {
+    if (data.expired() || data.lock() == nullptr) {
+        throw IteratorException("Object in iterator was deleted");
+    }
     return data.lock().get() + index;
 }
 
@@ -70,42 +84,55 @@ bool ConstMatrixIterator<T>::operator==(ConstMatrixIterator const& other) const
 template <typename T>
 ConstMatrixIterator<T>& ConstMatrixIterator<T>::operator++()
 {
-    index++;
+    if (++index > len) {
+        throw IteratorException("Iterator out of range");
+    }
     return *this;
 }
 
 template <typename T>
 ConstMatrixIterator<T> ConstMatrixIterator<T>::operator++(int)
 {
-    index++;
+    if (++index > len) {
+        throw IteratorException("Iterator out of range");
+    }
     return *this;
 }
 
 template <typename T>
 ConstMatrixIterator<T>& ConstMatrixIterator<T>::operator--()
 {
-    index--;
+    if (--index < 0) {
+        throw IteratorException("Iterator out of range");
+    }
     return *this;
 }
 
 template <typename T>
 ConstMatrixIterator<T> ConstMatrixIterator<T>::operator--(int)
 {
-    index--;
+    if (--index < 0) {
+        throw IteratorException("Iterator out of range");
+    }
     return *this;
 }
 
 template <typename T>
 const T& ConstMatrixIterator<T>::operator*() const
 {
+    if (data.expired() || data.lock() == nullptr) {
+        throw IteratorException("Object in iterator was deleted");
+    }
     return data.lock().get()[index];
 }
 
 template <typename T>
 const T* ConstMatrixIterator<T>::operator->() const
 {
+    if (data.expired() || data.lock() == nullptr) {
+        throw IteratorException("Object in iterator was deleted");
+    }
     return data.lock().get() + index;
 }
-
 
 #endif // __ITERATOR_HPP

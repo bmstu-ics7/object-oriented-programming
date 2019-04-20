@@ -6,7 +6,6 @@
 
 #include "basecontainer.h"
 #include "iterator.hpp"
-#include "exception.hpp"
 #include "linematrix.hpp"
 
 template <typename T>

@@ -18,4 +18,9 @@ const char* EmptyException::what() const noexcept
     return message;
 }
 
+const char* IteratorException::what() const noexcept
+{
+    return message;
+}
+
 #endif // __EXEPTION_HPP

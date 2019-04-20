@@ -825,25 +825,25 @@ Matrix<T> Matrix<T>::getMatrixWithoutRowAndCol(size_t row, size_t col)
 template <typename T>
 MatrixIterator<T> Matrix<T>::begin()
 {
-    return MatrixIterator<T>(data, 0);
+    return MatrixIterator<T>(data, 0, allocateLen);
 }
 
 template <typename T>
 MatrixIterator<T> Matrix<T>::end()
 {
-    return MatrixIterator<T>(data, allocateLen);
+    return MatrixIterator<T>(data, allocateLen, allocateLen);
 }
 
 template <typename T>
 ConstMatrixIterator<const T> Matrix<T>::begin() const
 {
-    return ConstMatrixIterator<T>(data, 0);
+    return ConstMatrixIterator<T>(data, 0, allocateLen);
 }
 
 template <typename T>
 ConstMatrixIterator<const T> Matrix<T>::end() const
 {
-    return ConstMatrixIterator<T>(data, allocateLen);
+    return ConstMatrixIterator<T>(data, allocateLen, allocateLen);
 }
 
 #endif // __MATRIX_HPP

@@ -35,7 +35,7 @@ int main()
     for (int i = 0; i < m4.rows(); ++i)
         for (int j = 0 ; j < m4.columns(); ++j)
             m4[i][j] = 2;
-    
+
     cout << m3 << endl << m4 << endl << m3 * m4 << endl;
 
     m3 *= m4;
@@ -57,14 +57,14 @@ int main()
     cout << d - 5.0 << endl;
     cout << d * 5.0 << endl;
     cout << d << endl;
-    
+
     cout << d * -d << endl;
-    
+
     Matrix<double> mat(10);
     for (int i = 0; i < mat.rows(); ++i)
         for (int j = 0; j < mat.columns(); ++j)
             mat[i][j] = rand() % 10;
-        
+
     cout << mat << endl;
     cout << -mat << endl;
     cout << mat * -mat << endl;
@@ -80,13 +80,36 @@ int main()
     cout << 2 * init << endl;
     cout << 4 + init << endl;
 
-    for (int el : init)
-        cout << el << ' ';
-    cout << endl;
+    try {
+        MatrixIterator<int> iter = init.begin();
+        iter++;
 
-    for (int el : m)
-        cout << el << ' ';
-    cout << endl;    
+        for (int el : init)
+            cout << el << ' ';
+        cout << endl;
+
+        for (int el : m)
+            cout << el << ' ';
+        cout << endl;
+
+        MatrixIterator<int> it = init.begin();
+        while (true) it++;
+    } catch(IteratorException& e) {
+        cout << e.what() << endl;
+    }
+
+    MatrixIterator<int> it;
+
+    {
+        Matrix<int> g {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+        it = g.begin();
+    }
+
+    try {
+        *it;
+    } catch(IteratorException& e) {
+        cout << e.what() << endl;
+    }
 
     try {
         init(100, 100) = 0;

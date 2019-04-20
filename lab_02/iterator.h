@@ -2,6 +2,7 @@
 #define __ITERATOR_H
 
 #include <iterator>
+#include "exception.hpp"
 
 template<typename T>
 class Matrix;
@@ -13,7 +14,7 @@ class MatrixIterator : public std::iterator<std::input_iterator_tag, T>
 
 public:
     MatrixIterator() {};
-    MatrixIterator(std::shared_ptr<T> data, int i) : data(data), index(i) {};
+    MatrixIterator(std::shared_ptr<T> data, int i, int len) : data(data), index(i), len(len) {};
 
     bool operator!=(MatrixIterator const& other) const;
     bool operator==(MatrixIterator const& other) const;
@@ -26,6 +27,7 @@ public:
 private:
     std::weak_ptr<T> data;
     int index;
+    int len;
 };
 
 template<typename T>
@@ -35,7 +37,7 @@ class ConstMatrixIterator : public std::iterator<std::input_iterator_tag, T>
 
 public:
     ConstMatrixIterator() {};
-    ConstMatrixIterator(std::shared_ptr<T> data, int i) : data(data), index(i) {};
+    ConstMatrixIterator(std::shared_ptr<T> data, int i, int len) : data(data), index(i), len(len) {};
 
     bool operator!=(ConstMatrixIterator const& other) const;
     bool operator==(ConstMatrixIterator const& other) const;
@@ -48,6 +50,7 @@ public:
 private:
     std::weak_ptr<T> data;
     int index;
+    int len;
 };
 
 #endif // __ITERATOR_H
