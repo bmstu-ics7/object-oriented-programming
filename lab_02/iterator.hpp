@@ -52,7 +52,7 @@ MatrixIterator<T> MatrixIterator<T>::operator--(int)
 }
 
 template <typename T>
-T& MatrixIterator<T>::operator*() const
+T& MatrixIterator<T>::operator*()
 {
     if (data.expired() || data.lock() == nullptr) {
         throw IteratorException("Object in iterator was deleted");
@@ -61,12 +61,35 @@ T& MatrixIterator<T>::operator*() const
 }
 
 template <typename T>
-T* MatrixIterator<T>::operator->() const
+T* MatrixIterator<T>::operator->()
 {
     if (data.expired() || data.lock() == nullptr) {
         throw IteratorException("Object in iterator was deleted");
     }
     return data.lock().get() + index;
+}
+template <typename T>
+const T& MatrixIterator<T>::operator*() const
+{
+    if (data.expired() || data.lock() == nullptr) {
+        throw IteratorException("Object in iterator was deleted");
+    }
+    return data.lock().get()[index];
+}
+
+template <typename T>
+const T* MatrixIterator<T>::operator->() const
+{
+    if (data.expired() || data.lock() == nullptr) {
+        throw IteratorException("Object in iterator was deleted");
+    }
+    return data.lock().get() + index;
+}
+
+template <typename T>
+MatrixIterator<T>::operator bool() const
+{
+    return !(data.expired() || data.lock() == nullptr);
 }
 
 template <typename T>
@@ -133,6 +156,12 @@ const T* ConstMatrixIterator<T>::operator->() const
         throw IteratorException("Object in iterator was deleted");
     }
     return data.lock().get() + index;
+}
+
+template <typename T>
+ConstMatrixIterator<T>::operator bool() const
+{
+    return !data.expired();
 }
 
 #endif // __ITERATOR_HPP

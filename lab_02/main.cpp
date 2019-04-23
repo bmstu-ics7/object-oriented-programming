@@ -103,9 +103,11 @@ int main()
     {
         Matrix<int> g {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         it = g.begin();
+        cout << bool(it) << endl;
     }
 
     try {
+        cout << bool(it) << endl;
         *it;
     } catch(IteratorException& e) {
         cout << e.what() << endl;

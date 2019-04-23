@@ -22,8 +22,11 @@ public:
     MatrixIterator<T> operator++(int);
     MatrixIterator<T>& operator--();
     MatrixIterator<T> operator--(int);
-    T& operator*() const;
-    T* operator->() const;
+    T& operator*();
+    T* operator->();
+    const T& operator*() const;
+    const T* operator->() const;
+    operator bool() const;
 private:
     std::weak_ptr<T> data;
     int index;
@@ -47,6 +50,7 @@ public:
     ConstMatrixIterator<T> operator--(int);
     const T& operator*() const;
     const T* operator->() const;
+    operator bool() const;
 private:
     std::weak_ptr<T> data;
     int index;
