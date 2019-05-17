@@ -1,0 +1,13 @@
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/bin/Debug/lab_03.exe
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/bin/Debug/lab_03.pdb
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/actool/_PartialAppManifest.items
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/actool/_BundleResourceWithLogicalName.items
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/ibtool-manifests/Main.storyboardc
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/ibtool/Main.storyboardc/Info.plist
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/ibtool/Main.storyboardc/MainMenu.nib
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/ibtool/Main.storyboardc/NSWindowController-B8D-0N-5wS.nib
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/ibtool/Main.storyboardc/XfG-lQ-9wD-view-m2S-Jp-Qdl.nib
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/lab_03.csprojAssemblyReference.cache
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/lab_03.csproj.CoreCompileInputs.cache
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/lab_03.exe
+/Users/alex/prog/bauman/sem04/oop/lab_03/lab_03/obj/Debug/lab_03.pdb
