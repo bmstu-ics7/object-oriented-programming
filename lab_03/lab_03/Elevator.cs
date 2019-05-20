@@ -42,21 +42,15 @@ namespace lab_03
             EventWait += Wait;
 
             EventWait?.Invoke();
-            doors.Run();
         }
 
-        delegate void Event();
-        private event Event EventGoUp;
-        private event Event EventGoDown;
-        private event Event EventWaitWithOpenDoors;
-        private event Event EventWait;
+        public delegate void Event();
+        public event Event EventGoUp;
+        public event Event EventGoDown;
+        public event Event EventWaitWithOpenDoors;
+        public event Event EventWait;
 
         private state ElevatorState;
-
-        public void Run()
-        {
-            EventWait?.Invoke();
-        }
 
         public string State
         {
@@ -87,12 +81,22 @@ namespace lab_03
         public void SetWaitFloor(int i)
         {
             WaitFloors[i - 1].SetWait();
+
+            if (ElevatorState == state.Wait)
+            {
+                EventWait?.Invoke();
+            }
         }
 
         private List<Floor> ComeToFloors;
         public void SetComeFloor(int i)
         {
             ComeToFloors[i - 1].SetWait();
+
+            if (ElevatorState == state.Wait)
+            {
+                EventWait?.Invoke();
+            }
         }
 
         public List<Floor> GetWaitFloors
@@ -122,178 +126,133 @@ namespace lab_03
 
         private int go;
 
-        private void GoUp()
+        public void GoUp()
         {
             go = 1;
+            ElevatorState = state.GoUp;
+            doors.CallEventClosing();
             Thread.Sleep(500);
             CurrentFloor++;
-            if (ComeToFloors[CurrentFloor].State || 
+
+            if (ComeToFloors[CurrentFloor].State ||
                 WaitFloors[CurrentFloor].State)
             {
-                ElevatorState = state.WaitWithOpenDoors;
-                ComeToFloors[CurrentFloor].ComeToFloor();
-                WaitFloors[CurrentFloor].ComeToFloor();
                 EventWaitWithOpenDoors?.Invoke();
-                return;
-            }
-        }
-
-        private void GoDown()
-        {
-            go = -1;
-            Thread.Sleep(500);
-            CurrentFloor--;
-            if (ComeToFloors[CurrentFloor].State || 
-                WaitFloors[CurrentFloor].State)
-            {
-                ElevatorState = state.WaitWithOpenDoors;
-                ComeToFloors[CurrentFloor].ComeToFloor();
-                WaitFloors[CurrentFloor].ComeToFloor();
-                doors.MakeChange();
-                EventWaitWithOpenDoors?.Invoke();
-                return;
-            }
-        }
-
-        private void WaitWithOpenDoors()
-        {
-            if (currentFloor == 0 || 
-                currentFloor == ComeToFloors.Count - 1)
-            {
-                go = 0;
-            }
-
-            doors.MakeChange();
-            Thread.Sleep(2000);
-            doors.MakeChange();
-            ElevatorState = state.Wait;
-            EventWait?.Invoke();
-        }
-
-        private void Wait()
-        {
-            int minIndex = -11;
-            if (go == 0)
-            {
-                for (int i = 0; i < ComeToFloors.Count; ++i)
-                {
-                    if (ComeToFloors[i].State)
-                    {
-                        if (Math.Abs(CurrentFloor - minIndex) >= 
-                            Math.Abs(CurrentFloor - i))
-                        {
-                            minIndex = i;
-                        }
-                    }
-                }
-
-                if (minIndex == -11)
-                {
-                    for (int i = 0; i < WaitFloors.Count; ++i)
-                    {
-                        if (WaitFloors[i].State)
-                        {
-                            if (Math.Abs(CurrentFloor - minIndex) >=
-                                Math.Abs(CurrentFloor - i))
-                            {
-                                minIndex = i;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (go == 1)
-            {
-                for (int i = currentFloor; i < ComeToFloors.Count; ++i)
-                {
-                    if (ComeToFloors[i].State)
-                    {
-                        if (Math.Abs(CurrentFloor - minIndex) >= 
-                            Math.Abs(CurrentFloor - i))
-                        {
-                            minIndex = i;
-                        }
-                    }
-                }
-
-                if (minIndex == -11)
-                {
-                    for (int i = currentFloor; i < WaitFloors.Count; ++i)
-                    {
-                        if (WaitFloors[i].State)
-                        {
-                            if (Math.Abs(CurrentFloor - minIndex) >=
-                                Math.Abs(CurrentFloor - i))
-                            {
-                                minIndex = i;
-                            }
-                        }
-                    }
-                }
-
-                if (minIndex == -11)
-                {
-                    go = -1;
-                }
             }
             else
             {
-                for (int i = ComeToFloors.Count - 1; i > -1; --i)
+                EventGoUp?.Invoke();
+            }
+        }
+
+        public void GoDown()
+        {
+            go = -1;
+            ElevatorState = state.GoDown;
+            doors.CallEventClosing();
+            Thread.Sleep(500);
+            CurrentFloor--;
+
+            if (ComeToFloors[CurrentFloor].State ||
+                WaitFloors[CurrentFloor].State)
+            {
+                EventWaitWithOpenDoors?.Invoke();
+            }
+            else
+            {
+                EventGoDown?.Invoke();
+            }
+        }
+
+        public void WaitWithOpenDoors()
+        {
+            ElevatorState = state.WaitWithOpenDoors;
+            doors.CallEventOpening();
+
+            ComeToFloors[CurrentFloor].ComeToFloor();
+            WaitFloors[CurrentFloor].ComeToFloor();
+
+            Thread.Sleep(1000);
+            EventWait?.Invoke();
+        }
+
+        private int FindFloor()
+        {
+            int minIndex = -11;
+            int startSearch = 0;
+            int finishSearch = ComeToFloors.Count;
+
+            if (go == 1)
+            {
+                startSearch = currentFloor;
+            }
+            else if (go == -1)
+            {
+                finishSearch = currentFloor;
+            }
+
+            for (int i = startSearch; i < finishSearch; ++i)
+            {
+                if (ComeToFloors[i].State)
                 {
-                    if (ComeToFloors[i].State)
+                    if (Math.Abs(CurrentFloor - minIndex) >=
+                        Math.Abs(CurrentFloor - i))
                     {
-                        if (Math.Abs(CurrentFloor - minIndex) >= 
+                        minIndex = i;
+                    }
+                }
+            }
+
+            if (minIndex == -11)
+            {
+                for (int i = startSearch; i < finishSearch; ++i)
+                {
+                    if (WaitFloors[i].State)
+                    {
+                        if (Math.Abs(CurrentFloor - minIndex) >=
                             Math.Abs(CurrentFloor - i))
                         {
                             minIndex = i;
                         }
                     }
                 }
+            }
 
-                if (minIndex == -11)
-                {
-                    for (int i = WaitFloors.Count - 1; i > -1; --i)
-                    {
-                        if (WaitFloors[i].State)
-                        {
-                            if (Math.Abs(CurrentFloor - minIndex) >=
-                                Math.Abs(CurrentFloor - i))
-                            {
-                                minIndex = i;
-                            }
-                        }
-                    }
-                }
+            return minIndex;
+        }
 
-                if (minIndex == -11)
+        public void Wait()
+        {
+            ElevatorState = state.Wait;
+            doors.CallEventClosing();
+            int floor = FindFloor();
+
+            if (floor == -11)
+            {
+                go *= -1;
+
+                floor = FindFloor();
+                if (floor == -11)
                 {
-                    go = 1;
+                    go = 0;
                 }
             }
 
-            if (minIndex >= 0)
+            if (floor != -11)
             {
-                if (CurrentFloor == minIndex)
+                if (CurrentFloor == floor)
                 {
-                    ElevatorState = state.WaitWithOpenDoors;
-                    return;
+                    EventWaitWithOpenDoors?.Invoke();
                 }
-                else if (CurrentFloor - minIndex > 0)
+                else if (CurrentFloor - floor > 0)
                 {
-                    ElevatorState = state.GoDown;
                     EventGoDown?.Invoke();
                 }
                 else
                 {
-                    ElevatorState = state.GoUp;
                     EventGoUp?.Invoke();
                 }
             }
-
-            /*if (minIndex == -11)
-            {
-                EventWait?.Invoke();
-            }*/
         }
     }
 }

@@ -17,11 +17,8 @@ namespace lab_03
             elevator = new Elevator();
 
             SetState();
-
-            RunElevator();
-            RunDoors();
         }
-
+        /*
         private async void RunElevator()
         {
             while (true) await Task.Run(() => elevator.Run());
@@ -31,7 +28,7 @@ namespace lab_03
         {
             while (true) await Task.Run(() => elevator.GetDoors.Run());
         }
-
+        */
         private async void SetState()
         {
             while (true)
@@ -128,104 +125,114 @@ namespace lab_03
             }
         }
 
+        private async void ACallFloor(int i)
+        {
+            await Task.Run(() => elevator.SetWaitFloor(i));
+        }
+
         partial void CallFloor1(NSObject sender)
         {
-            elevator.SetWaitFloor(1);
+            ACallFloor(1);
         }
 
         partial void CallFloor2(NSObject sender)
         {
-            elevator.SetWaitFloor(2);
+            ACallFloor(2);
         }
 
         partial void CallFloor3(NSObject sender)
         {
-            elevator.SetWaitFloor(3);
+            ACallFloor(3);
         }
 
         partial void CallFloor4(NSObject sender)
         {
-            elevator.SetWaitFloor(4);
+            ACallFloor(4);
         }
 
         partial void CallFloor5(NSObject sender)
         {
-            elevator.SetWaitFloor(5);
+            ACallFloor(5);
         }
 
         partial void CallFloor6(NSObject sender)
         {
-            elevator.SetWaitFloor(6);
+            ACallFloor(6);
         }
 
         partial void CallFloor7(NSObject sender)
         {
-            elevator.SetWaitFloor(7);
+            ACallFloor(7);
         }
 
         partial void CallFloor8(NSObject sender)
         {
-            elevator.SetWaitFloor(8);
+            ACallFloor(8);
         }
 
         partial void CallFloor9(NSObject sender)
         {
-            elevator.SetWaitFloor(9);
+            ACallFloor(9);
         }
 
         partial void CallFloor10(NSObject sender)
         {
-            elevator.SetWaitFloor(10);
+            ACallFloor(10);
+        }
+
+        private async void AGoFloor(int i)
+        {
+            await Task.Run(() => elevator.SetComeFloor(i));
         }
 
         partial void GoFloor1(NSObject sender)
         {
-            elevator.SetComeFloor(1);
+            AGoFloor(1);
         }
 
         partial void GoFloor2(NSObject sender)
         {
-            elevator.SetComeFloor(2);
+            AGoFloor(2);
         }
 
         partial void GoFloor3(NSObject sender)
         {
-            elevator.SetComeFloor(3);
+            AGoFloor(3);
         }
 
         partial void GoFloor4(NSObject sender)
         {
-            elevator.SetComeFloor(4);
+            AGoFloor(4);
         }
 
         partial void GoFloor5(NSObject sender)
         {
-            elevator.SetComeFloor(5);
+            AGoFloor(5);
         }
 
         partial void GoFloor6(NSObject sender)
         {
-            elevator.SetComeFloor(6);
+            AGoFloor(6);
         }
 
         partial void GoFloor7(NSObject sender)
         {
-            elevator.SetComeFloor(7);
+            AGoFloor(7);
         }
 
         partial void GoFloor8(NSObject sender)
         {
-            elevator.SetComeFloor(8);
+            AGoFloor(8);
         }
 
         partial void GoFloor9(NSObject sender)
         {
-            elevator.SetComeFloor(9);
+            AGoFloor(9);
         }
 
         partial void GoFloor10(NSObject sender)
         {
-            elevator.SetComeFloor(10);
+            AGoFloor(10);
         }
     }
 }

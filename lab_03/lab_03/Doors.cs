@@ -17,33 +17,23 @@ namespace lab_03
         public Doors()
         {
             DoorsState = state.Close;
-            Change = false;
-
-            EventOpen += Open;
             EventOpening += Opening;
-            EventClose += Close;
             EventClosing += Closing;
         }
 
-        private delegate void Event();
-        private event Event EventOpen;
-        private event Event EventOpening;
-        private event Event EventClose;
-        private event Event EventClosing;
+        public delegate void Event();
+        public event Event EventOpening;
+        public event Event EventClosing;
 
-        public void Run()
+        public void CallEventOpening()
         {
-            if (!IsOpen)
-            {
-                EventClose?.Invoke();
-            }
-            else
-            {
-                EventOpen?.Invoke();
-            }
+            EventOpening?.Invoke();
         }
 
-        private bool Change;
+        public void CallEventClosing()
+        {
+            EventClosing?.Invoke();
+        }
 
         private state DoorsState;
 
@@ -72,44 +62,34 @@ namespace lab_03
             get => DoorsState == state.Open;
         }
 
-        private void Open()
+        public void Open()
         {
-            if (Change)
-            {
-                DoorsState = state.Closing;
-                Change = false;
-                EventClosing?.Invoke();
-            }
-        }
-
-        private void Opening()
-        {
-            Thread.Sleep(1000);
             DoorsState = state.Open;
-            EventOpen?.Invoke();
         }
 
-        private void Close()
+        public void Close()
         {
-            if (Change)
+            DoorsState = state.Close;
+        }
+
+        public void Opening()
+        {
+            if (!IsOpen)
             {
                 DoorsState = state.Opening;
-                Change = false;
-                EventOpening?.Invoke();
+                Thread.Sleep(2000);
+                Open();
             }
         }
 
-        private void Closing()
+        public void Closing()
         {
-            Thread.Sleep(1000);
-            DoorsState = state.Close;
-            EventClose?.Invoke();
-        }
-
-        public void MakeChange()
-        {
-            Change = true;
-            Thread.Sleep(1000);
+            if (IsOpen)
+            {
+                DoorsState = state.Closing;
+                Thread.Sleep(2000);
+                Close();
+            }
         }
     }
 }
