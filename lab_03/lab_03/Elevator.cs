@@ -6,7 +6,11 @@ namespace lab_03
 {
     public class Elevator
     {
-        private enum state
+        const int WaitGoFloor = 500;
+        const int WaitDoors = 2000;
+        const int WaitOpen = 1000;
+
+        private enum State
         {
             GoUp,               // Подъем
             GoDown,             // Спуск
@@ -16,7 +20,7 @@ namespace lab_03
 
         public Elevator()
         {
-            ElevatorState = state.Wait;
+            ElevatorState = State.Wait;
 
             WaitFloors = new List<Floor>();
             for (int i = 1; i <= 10; ++i)
@@ -30,7 +34,7 @@ namespace lab_03
                 ComeToFloors.Add(new Floor(i));
             }
 
-            doors = new Doors();
+            Doors = new Doors();
 
             CurrentFloor = 0;
 
@@ -40,31 +44,35 @@ namespace lab_03
             EventGoDown += GoDown;
             EventWaitWithOpenDoors += WaitWithOpenDoors;
             EventWait += Wait;
+            EventOpen += Open;
+            EventClose += Close;
 
             EventWait?.Invoke();
         }
 
-        public delegate void Event();
+        public delegate void Event(Object obj = null);
         public event Event EventGoUp;
         public event Event EventGoDown;
         public event Event EventWaitWithOpenDoors;
         public event Event EventWait;
+        public event Event EventClose;
+        public event Event EventOpen;
 
-        private state ElevatorState;
+        private State ElevatorState;
 
-        public string State
+        public string GetState
         {
             get
             {
                 switch (ElevatorState)
                 {
-                    case state.GoUp:
+                    case State.GoUp:
                         return "Вверх";
-                    case state.GoDown:
+                    case State.GoDown:
                         return "Вниз";
-                    case state.WaitWithOpenDoors:
+                    case State.WaitWithOpenDoors:
                         return "Открытые двери";
-                    case state.Wait:
+                    case State.Wait:
                         return "Ожидание";
                     default:
                         return "Неизвестное состояние";
@@ -72,44 +80,29 @@ namespace lab_03
             }
         }
 
-        public Doors GetDoors
-        {
-            get => doors;
-        }
-
-        private List<Floor> WaitFloors;
+        public List<Floor> WaitFloors { get; private set; }
         public void SetWaitFloor(int i)
         {
             WaitFloors[i - 1].SetWait();
 
-            if (ElevatorState == state.Wait)
+            if (ElevatorState == State.Wait)
             {
                 EventWait?.Invoke();
             }
         }
 
-        private List<Floor> ComeToFloors;
+        public List<Floor> ComeToFloors { get; private set; }
         public void SetComeFloor(int i)
         {
             ComeToFloors[i - 1].SetWait();
 
-            if (ElevatorState == state.Wait)
+            if (ElevatorState == State.Wait)
             {
                 EventWait?.Invoke();
             }
         }
 
-        public List<Floor> GetWaitFloors
-        {
-            get => WaitFloors;
-        }
-
-        public List<Floor> GetComeToFloors
-        {
-            get => ComeToFloors;
-        }
-
-        private Doors doors;
+        public Doors Doors { get; private set; }
 
         private int currentFloor;
 
@@ -126,54 +119,60 @@ namespace lab_03
 
         private int go;
 
-        public void GoUp()
+        public void GoUp(Object obj = null)
         {
             go = 1;
-            ElevatorState = state.GoUp;
-            doors.CallEventClosing();
-            Thread.Sleep(500);
+            ElevatorState = State.GoUp;
             CurrentFloor++;
 
-            if (ComeToFloors[CurrentFloor].State ||
-                WaitFloors[CurrentFloor].State)
+            if (ComeToFloors[CurrentFloor].GetState ||
+                WaitFloors[CurrentFloor].GetState)
             {
-                EventWaitWithOpenDoors?.Invoke();
+                EventOpen?.Invoke();
             }
             else
             {
-                EventGoUp?.Invoke();
+                if (EventGoUp != null)
+                {
+                    TimerCallback call = new TimerCallback(EventGoUp);
+                    Timer timer = new Timer(call, null, WaitGoFloor, -1);
+                }
             }
         }
 
-        public void GoDown()
+        public void GoDown(Object obj = null)
         {
             go = -1;
-            ElevatorState = state.GoDown;
-            doors.CallEventClosing();
-            Thread.Sleep(500);
+            ElevatorState = State.GoDown;
             CurrentFloor--;
 
-            if (ComeToFloors[CurrentFloor].State ||
-                WaitFloors[CurrentFloor].State)
+            if (ComeToFloors[CurrentFloor].GetState ||
+                WaitFloors[CurrentFloor].GetState)
             {
-                EventWaitWithOpenDoors?.Invoke();
+                EventOpen?.Invoke();
             }
             else
             {
-                EventGoDown?.Invoke();
+                if (EventGoDown != null)
+                {
+                    TimerCallback call = new TimerCallback(EventGoDown);
+                    Timer timer = new Timer(call, null, WaitGoFloor, -1);
+                }
             }
         }
 
-        public void WaitWithOpenDoors()
+        public void WaitWithOpenDoors(Object obj = null)
         {
-            ElevatorState = state.WaitWithOpenDoors;
-            doors.CallEventOpening();
+            ElevatorState = State.WaitWithOpenDoors;
 
             ComeToFloors[CurrentFloor].ComeToFloor();
             WaitFloors[CurrentFloor].ComeToFloor();
 
-            Thread.Sleep(1000);
-            EventWait?.Invoke();
+            if (EventClose != null)
+            {
+                TimerCallback call = new TimerCallback(EventClose);
+                Timer timer = new Timer(call, null, WaitOpen, -1);
+            }
         }
 
         private int FindFloor()
@@ -193,7 +192,7 @@ namespace lab_03
 
             for (int i = startSearch; i < finishSearch; ++i)
             {
-                if (ComeToFloors[i].State)
+                if (ComeToFloors[i].GetState)
                 {
                     if (Math.Abs(CurrentFloor - minIndex) >=
                         Math.Abs(CurrentFloor - i))
@@ -207,7 +206,7 @@ namespace lab_03
             {
                 for (int i = startSearch; i < finishSearch; ++i)
                 {
-                    if (WaitFloors[i].State)
+                    if (WaitFloors[i].GetState)
                     {
                         if (Math.Abs(CurrentFloor - minIndex) >=
                             Math.Abs(CurrentFloor - i))
@@ -221,10 +220,9 @@ namespace lab_03
             return minIndex;
         }
 
-        public void Wait()
+        public void Wait(Object obj = null)
         {
-            ElevatorState = state.Wait;
-            doors.CallEventClosing();
+            ElevatorState = State.Wait;
             int floor = FindFloor();
 
             if (floor == -11)
@@ -242,7 +240,7 @@ namespace lab_03
             {
                 if (CurrentFloor == floor)
                 {
-                    EventWaitWithOpenDoors?.Invoke();
+                    EventOpen?.Invoke();
                 }
                 else if (CurrentFloor - floor > 0)
                 {
@@ -251,6 +249,34 @@ namespace lab_03
                 else
                 {
                     EventGoUp?.Invoke();
+                }
+            }
+        }
+
+        public void Open(Object obj = null)
+        {
+            if (ElevatorState != State.WaitWithOpenDoors)
+            {
+                Doors.CallEventOpening();
+
+                if (EventWaitWithOpenDoors != null)
+                {
+                    TimerCallback call = new TimerCallback(EventWaitWithOpenDoors);
+                    Timer timer = new Timer(call, null, WaitDoors, -1);
+                }
+            }
+        }
+
+        public void Close(Object obj = null)
+        {
+            if (ElevatorState == State.WaitWithOpenDoors)
+            {
+                Doors.CallEventClosing();
+
+                if (EventWait != null)
+                {
+                    TimerCallback call = new TimerCallback(EventWait);
+                    Timer timer = new Timer(call, null, WaitDoors, -1);
                 }
             }
         }

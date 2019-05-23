@@ -3,7 +3,7 @@ namespace lab_03
 {
     public class Floor
     {
-        private enum state
+        private enum State
         {
             Wait,   // Ожидание
             NoWait  // Нет ожидания
@@ -12,16 +12,34 @@ namespace lab_03
         public Floor()
         {
             Number = 1;
-            FloorState = state.NoWait;
+            FloorState = State.NoWait;
+
+            EventWait += SetWait;
+            EventCome += ComeToFloor;
         }
 
         public Floor(int number)
         {
             Number = number;
-            FloorState = state.NoWait;
+            FloorState = State.NoWait;
+
+            EventWait += SetWait;
+            EventCome += ComeToFloor;
         }
 
-        private delegate void Event();
+        public delegate void Event();
+        public event Event EventWait;
+        public event Event EventCome;
+
+        public void CallEventWait()
+        {
+            EventWait?.Invoke();
+        }
+
+        public void CallEventCome()
+        {
+            EventCome?.Invoke();
+        }
 
         private int number;
 
@@ -31,21 +49,21 @@ namespace lab_03
             private set => number = value;
         }
 
-        private state FloorState;
+        private State FloorState;
 
-        public bool State
+        public bool GetState
         {
-            get => FloorState == state.Wait;
+            get => FloorState == State.Wait;
         }
 
         public void SetWait()
         {
-            FloorState = state.Wait;
+            FloorState = State.Wait;
         }
 
         public void ComeToFloor()
         {
-            FloorState = state.NoWait;
+            FloorState = State.NoWait;
         }
     }
 }

@@ -6,7 +6,9 @@ namespace lab_03
 {
     public class Doors
     {
-        private enum state
+        const int Wait = 2000;
+
+        private enum State
         {
             Open,       // Открыты
             Opening,    // Открытие
@@ -16,12 +18,12 @@ namespace lab_03
 
         public Doors()
         {
-            DoorsState = state.Close;
+            DoorsState = State.Close;
             EventOpening += Opening;
             EventClosing += Closing;
         }
 
-        public delegate void Event();
+        public delegate void Event(Object obj = null);
         public event Event EventOpening;
         public event Event EventClosing;
 
@@ -35,21 +37,21 @@ namespace lab_03
             EventClosing?.Invoke();
         }
 
-        private state DoorsState;
+        private State DoorsState;
 
-        public string State
+        public string GetState
         {
             get
             {
                 switch (DoorsState)
                 {
-                    case state.Close:
+                    case State.Close:
                         return "Закрыты";
-                    case state.Closing:
+                    case State.Closing:
                         return "Закрываются";
-                    case state.Open:
+                    case State.Open:
                         return "Открыты";
-                    case state.Opening:
+                    case State.Opening:
                         return "Открываются";
                     default:
                         return "Неизвестное состояние";
@@ -57,39 +59,29 @@ namespace lab_03
             }
         }
 
-        public bool IsOpen
+        public void Open(Object obj = null)
         {
-            get => DoorsState == state.Open;
+            DoorsState = State.Open;
         }
 
-        public void Open()
+        public void Close(Object obj = null)
         {
-            DoorsState = state.Open;
+            DoorsState = State.Close;
         }
 
-        public void Close()
+        public void Opening(Object obj = null)
         {
-            DoorsState = state.Close;
+            DoorsState = State.Opening;
+            TimerCallback call = new TimerCallback(Open);
+            Timer timer = new Timer(call, null, Wait, -1);
+
         }
 
-        public void Opening()
+        public void Closing(Object obj = null)
         {
-            if (!IsOpen)
-            {
-                DoorsState = state.Opening;
-                Thread.Sleep(2000);
-                Open();
-            }
-        }
-
-        public void Closing()
-        {
-            if (IsOpen)
-            {
-                DoorsState = state.Closing;
-                Thread.Sleep(2000);
-                Close();
-            }
+            DoorsState = State.Closing;
+            TimerCallback call = new TimerCallback(Close);
+            Timer timer = new Timer(call, null, Wait, -1);
         }
     }
 }

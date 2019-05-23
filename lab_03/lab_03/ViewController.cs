@@ -18,89 +18,79 @@ namespace lab_03
 
             SetState();
         }
-        /*
-        private async void RunElevator()
-        {
-            while (true) await Task.Run(() => elevator.Run());
-        }
 
-        private async void RunDoors()
-        {
-            while (true) await Task.Run(() => elevator.GetDoors.Run());
-        }
-        */
         private async void SetState()
         {
             while (true)
             {
                 await Task.Run(() => Thread.Sleep(100));
 
-                lblElevatorState.StringValue = elevator.State;
-                lblDoorsState.StringValue = elevator.GetDoors.State;
+                lblElevatorState.StringValue = elevator.GetState;
+                lblDoorsState.StringValue = elevator.Doors.GetState;
                 lblCurrentFloor.StringValue =
                     Convert.ToString(elevator.CurrentFloor + 1) + " этаж";
 
-                List<Floor> GoFloor = elevator.GetComeToFloors;
-                List<Floor> ComeFloor = elevator.GetWaitFloors;
+                List<Floor> GoFloor = elevator.ComeToFloors;
+                List<Floor> ComeFloor = elevator.WaitFloors;
 
-                if (GoFloor[0].State) btnGoFloor1.Enabled = false;
+                if (GoFloor[0].GetState) btnGoFloor1.Enabled = false;
                 else btnGoFloor1.Enabled = true;
 
-                if (GoFloor[1].State) btnGoFloor2.Enabled = false;
+                if (GoFloor[1].GetState) btnGoFloor2.Enabled = false;
                 else btnGoFloor2.Enabled = true;
 
-                if (GoFloor[2].State) btnGoFloor3.Enabled = false;
+                if (GoFloor[2].GetState) btnGoFloor3.Enabled = false;
                 else btnGoFloor3.Enabled = true;
 
-                if (GoFloor[3].State) btnGoFloor4.Enabled = false;
+                if (GoFloor[3].GetState) btnGoFloor4.Enabled = false;
                 else btnGoFloor4.Enabled = true;
 
-                if (GoFloor[4].State) btnGoFloor5.Enabled = false;
+                if (GoFloor[4].GetState) btnGoFloor5.Enabled = false;
                 else btnGoFloor5.Enabled = true;
 
-                if (GoFloor[5].State) btnGoFloor6.Enabled = false;
+                if (GoFloor[5].GetState) btnGoFloor6.Enabled = false;
                 else btnGoFloor6.Enabled = true;
 
-                if (GoFloor[6].State) btnGoFloor7.Enabled = false;
+                if (GoFloor[6].GetState) btnGoFloor7.Enabled = false;
                 else btnGoFloor7.Enabled = true;
 
-                if (GoFloor[7].State) btnGoFloor8.Enabled = false;
+                if (GoFloor[7].GetState) btnGoFloor8.Enabled = false;
                 else btnGoFloor8.Enabled = true;
 
-                if (GoFloor[8].State) btnGoFloor9.Enabled = false;
+                if (GoFloor[8].GetState) btnGoFloor9.Enabled = false;
                 else btnGoFloor9.Enabled = true;
 
-                if (GoFloor[9].State) btnGoFloor10.Enabled = false;
+                if (GoFloor[9].GetState) btnGoFloor10.Enabled = false;
                 else btnGoFloor10.Enabled = true;
 
-                if (ComeFloor[0].State) btnCallFloor1.Enabled = false;
+                if (ComeFloor[0].GetState) btnCallFloor1.Enabled = false;
                 else btnCallFloor1.Enabled = true;
 
-                if (ComeFloor[1].State) btnCallFloor2.Enabled = false;
+                if (ComeFloor[1].GetState) btnCallFloor2.Enabled = false;
                 else btnCallFloor2.Enabled = true;
 
-                if (ComeFloor[2].State) btnCallFloor3.Enabled = false;
+                if (ComeFloor[2].GetState) btnCallFloor3.Enabled = false;
                 else btnCallFloor3.Enabled = true;
 
-                if (ComeFloor[3].State) btnCallFloor4.Enabled = false;
+                if (ComeFloor[3].GetState) btnCallFloor4.Enabled = false;
                 else btnCallFloor4.Enabled = true;
 
-                if (ComeFloor[4].State) btnCallFloor5.Enabled = false;
+                if (ComeFloor[4].GetState) btnCallFloor5.Enabled = false;
                 else btnCallFloor5.Enabled = true;
 
-                if (ComeFloor[5].State) btnCallFloor6.Enabled = false;
+                if (ComeFloor[5].GetState) btnCallFloor6.Enabled = false;
                 else btnCallFloor6.Enabled = true;
 
-                if (ComeFloor[6].State) btnCallFloor7.Enabled = false;
+                if (ComeFloor[6].GetState) btnCallFloor7.Enabled = false;
                 else btnCallFloor7.Enabled = true;
 
-                if (ComeFloor[7].State) btnCallFloor8.Enabled = false;
+                if (ComeFloor[7].GetState) btnCallFloor8.Enabled = false;
                 else btnCallFloor8.Enabled = true;
 
-                if (ComeFloor[8].State) btnCallFloor9.Enabled = false;
+                if (ComeFloor[8].GetState) btnCallFloor9.Enabled = false;
                 else btnCallFloor9.Enabled = true;
 
-                if (ComeFloor[9].State) btnCallFloor10.Enabled = false;
+                if (ComeFloor[9].GetState) btnCallFloor10.Enabled = false;
                 else btnCallFloor10.Enabled = true;
             }
         }
