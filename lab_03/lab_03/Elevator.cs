@@ -7,7 +7,6 @@ namespace lab_03
     public class Elevator
     {
         const int WaitGoFloor = 500;
-        const int WaitDoors = 2000;
         const int WaitOpen = 1000;
 
         private enum State
@@ -121,57 +120,66 @@ namespace lab_03
 
         public void GoUp(Object obj = null)
         {
-            go = 1;
-            ElevatorState = State.GoUp;
-            CurrentFloor++;
+            if (ElevatorState == State.Wait || ElevatorState == State.GoUp)
+            {
+                go = 1;
+                ElevatorState = State.GoUp;
+                CurrentFloor++;
 
-            if (ComeToFloors[CurrentFloor].GetState ||
-                WaitFloors[CurrentFloor].GetState)
-            {
-                EventOpen?.Invoke();
-            }
-            else
-            {
-                if (EventGoUp != null)
+                if (ComeToFloors[CurrentFloor].GetState ||
+                    WaitFloors[CurrentFloor].GetState)
                 {
-                    TimerCallback call = new TimerCallback(EventGoUp);
-                    Timer timer = new Timer(call, null, WaitGoFloor, -1);
+                    EventOpen?.Invoke();
+                }
+                else
+                {
+                    if (EventGoUp != null)
+                    {
+                        TimerCallback call = new TimerCallback(EventGoUp);
+                        Timer timer = new Timer(call, null, WaitGoFloor, -1);
+                    }
                 }
             }
         }
 
         public void GoDown(Object obj = null)
         {
-            go = -1;
-            ElevatorState = State.GoDown;
-            CurrentFloor--;
+            if (ElevatorState == State.Wait || ElevatorState == State.GoDown)
+            {
+                go = -1;
+                ElevatorState = State.GoDown;
+                CurrentFloor--;
 
-            if (ComeToFloors[CurrentFloor].GetState ||
-                WaitFloors[CurrentFloor].GetState)
-            {
-                EventOpen?.Invoke();
-            }
-            else
-            {
-                if (EventGoDown != null)
+                if (ComeToFloors[CurrentFloor].GetState ||
+                    WaitFloors[CurrentFloor].GetState)
                 {
-                    TimerCallback call = new TimerCallback(EventGoDown);
-                    Timer timer = new Timer(call, null, WaitGoFloor, -1);
+                    EventOpen?.Invoke();
+                }
+                else
+                {
+                    if (EventGoDown != null)
+                    {
+                        TimerCallback call = new TimerCallback(EventGoDown);
+                        Timer timer = new Timer(call, null, WaitGoFloor, -1);
+                    }
                 }
             }
         }
 
         public void WaitWithOpenDoors(Object obj = null)
         {
-            ElevatorState = State.WaitWithOpenDoors;
-
-            ComeToFloors[CurrentFloor].ComeToFloor();
-            WaitFloors[CurrentFloor].ComeToFloor();
-
-            if (EventClose != null)
+            if (ElevatorState == State.GoUp || ElevatorState == State.GoDown)
             {
-                TimerCallback call = new TimerCallback(EventClose);
-                Timer timer = new Timer(call, null, WaitOpen, -1);
+                ElevatorState = State.WaitWithOpenDoors;
+
+                ComeToFloors[CurrentFloor].ComeToFloor();
+                WaitFloors[CurrentFloor].ComeToFloor();
+
+                if (EventClose != null)
+                {
+                    TimerCallback call = new TimerCallback(EventClose);
+                    Timer timer = new Timer(call, null, WaitOpen, -1);
+                }
             }
         }
 
@@ -262,7 +270,7 @@ namespace lab_03
                 if (EventWaitWithOpenDoors != null)
                 {
                     TimerCallback call = new TimerCallback(EventWaitWithOpenDoors);
-                    Timer timer = new Timer(call, null, WaitDoors, -1);
+                    Timer timer = new Timer(call, null, Doors.Wait, -1);
                 }
             }
         }
@@ -276,7 +284,7 @@ namespace lab_03
                 if (EventWait != null)
                 {
                     TimerCallback call = new TimerCallback(EventWait);
-                    Timer timer = new Timer(call, null, WaitDoors, -1);
+                    Timer timer = new Timer(call, null, Doors.Wait, -1);
                 }
             }
         }

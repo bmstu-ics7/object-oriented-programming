@@ -6,7 +6,7 @@ namespace lab_03
 {
     public class Doors
     {
-        const int Wait = 2000;
+        public const int Wait = 2000;
 
         private enum State
         {
@@ -71,17 +71,22 @@ namespace lab_03
 
         public void Opening(Object obj = null)
         {
-            DoorsState = State.Opening;
-            TimerCallback call = new TimerCallback(Open);
-            Timer timer = new Timer(call, null, Wait, -1);
-
+            if (DoorsState == State.Close)
+            {
+                DoorsState = State.Opening;
+                TimerCallback call = new TimerCallback(Open);
+                Timer timer = new Timer(call, null, Wait, -1);
+            }
         }
 
         public void Closing(Object obj = null)
         {
-            DoorsState = State.Closing;
-            TimerCallback call = new TimerCallback(Close);
-            Timer timer = new Timer(call, null, Wait, -1);
+            if (DoorsState == State.Open)
+            {
+                DoorsState = State.Closing;
+                TimerCallback call = new TimerCallback(Close);
+                Timer timer = new Timer(call, null, Wait, -1);
+            }
         }
     }
 }
