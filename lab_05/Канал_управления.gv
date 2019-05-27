@@ -1,0 +1,21 @@
+digraph {
+    off [shape=box, label="Выкл."]
+    mol [shape=box, label="Молоть кофе"]
+    pour [shape=box, label="Засыпать молотый кофе"]
+    hot [shape=box, label="Нагрев воды"]
+    water [shape=box, label="Пустить горячую воду"]
+    cloud [shape=box, label="Получить пар"]
+    milk [shape=box, label="Взбить молоко"]
+    milkpour [shape=box, label="Налить молоко"]
+
+    off -> mol [label="Cg1"]
+    mol -> pour [label="C1"]
+    pour -> hot [label="H1"]
+    off -> hot [label="H1"]
+    hot -> water [label="W2"]
+    water -> off [label="C5"]
+    water -> cloud [label="W3"]
+    cloud -> milk [label="M2"]
+    milk -> milkpour [label="M3"]
+    milkpour -> off [label="M4"]
+}

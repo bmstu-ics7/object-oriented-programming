@@ -1,0 +1,13 @@
+digraph {
+    rankdir = LR
+
+    off [shape=box, label="1. Выкл."]
+    cloud [shape=box, label="2. Получение пара"]
+    milk [shape=box, label="3. Взбив молока"]
+    give [shape=box, label="4. Подача молока"]
+
+    off -> cloud [label="M1 Запрос"]
+    cloud -> milk [label="M2 Пар получен"]
+    milk -> give [label="M3 Молоко взбито"]
+    give -> off [label="M4 Молоко подано"]
+}

@@ -1,0 +1,14 @@
+digraph {
+    rankdir = LR
+
+    off [shape=box, label="1. Выкл."]
+    hot [shape=box, label="2. Нагрев"]
+    water [shape=box, label="3. Подача воды"]
+    cloud [shape=box, label="4. Подача пара"]
+
+    off -> hot [label="W1 Включился нагреватель"]
+    hot -> water [label="W2 Вода нагрелась\n(Запрос на воду)"]
+    hot -> cloud [label="W3 Вода нагрелась\n(Запрос на пар)"]
+    water -> off [label="W4 Вода подалась"]
+    cloud -> off [label="W5 Пар подался"]
+}

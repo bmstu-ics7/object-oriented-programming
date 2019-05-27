@@ -1,0 +1,22 @@
+digraph {
+    rankdir = LR
+
+    coffe [shape=box, label="Емкость для воды"]
+    first [label="C1 Сделать кофе"]
+    second [label="C2 Налить кофе"]
+    third [label="C3 Добавить молоко в кофе"]
+    fourth [label="C4 Кофе с молоком готово"]
+    fivth [label="C5 Налить воды"]
+    sixth [label="C6 Кофе или вода готова"]
+
+    coffe -> first [label="Нужен молотый кофе"]
+    first -> coffe [label="Молотый кофе готов"]
+    coffe -> second [label="Нужен кипяток"]
+    second -> coffe [label="Кипяток подан"]
+    coffe -> third [label="Нужно взбитое молоко"]
+    third -> coffe [label="Взбитое молоко подано"]
+    coffe -> fourth [label="В кофе добавлено молоко"]
+    coffe -> fivth [label="Нужен кипяток"]
+    fivth -> coffe [label="Кипяток подан"]
+    coffe -> sixth [label="Кипяток налит"]
+}
