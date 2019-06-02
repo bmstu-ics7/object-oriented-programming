@@ -14,7 +14,9 @@ digraph {
     water -> hot [label="Н1"]
 
     coffe -> milk [label="В1"]
-    milk -> water [label="Е2"]
 
     coffe -> mol [label="КФ1"]
+
+    milk -> coffe [label="К3"]
+    coffe -> water [label="E2"]
 }

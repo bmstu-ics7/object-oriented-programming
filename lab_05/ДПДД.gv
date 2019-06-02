@@ -1,22 +1,22 @@
 digraph {
-    rankdir = LR
+    archive [shape=box, label="Взбиватель молока"]
+    getmilk [label="Получить количество молока"]
+    get [label="Получение молока"]
+    cloud [label="Получение пара"]
+    shake [label="Взбив молока"]
+    signal [shape=none, label=""]
+    getcloud [label="Получить количества пара"]
+    outsignal [label="Подать сигнал, что молоко взбито"]
+    out [shape=none, label=""]
+    start [shape=none, label=""]
 
-    coffe [shape=box, label="Кофемашина"]
-    first [label="C1 Сделать кофе"]
-    second [label="C2 Налить кофе"]
-    third [label="C3 Добавить молоко в кофе"]
-    fourth [label="C4 Кофе с молоком готово"]
-    fivth [label="C5 Налить воды"]
-    sixth [label="C6 Кофе или вода готова"]
-
-    coffe -> first [label="Нужен молотый кофе"]
-    first -> coffe [label="Молотый кофе готов"]
-    coffe -> second [label="Нужен кипяток"]
-    second -> coffe [label="Кипяток подан"]
-    coffe -> third [label="Нужно взбитое молоко"]
-    third -> coffe [label="Взбитое молоко подано"]
-    coffe -> fourth [label="В кофе добавлено молоко"]
-    coffe -> fivth [label="Нужен кипяток"]
-    fivth -> coffe [label="Кипяток подан"]
-    coffe -> sixth [label="Кипяток налит"]
+    cloud -> shake [style=dashed]
+    shake -> outsignal [label="Молоко взбито"]
+    archive -> getmilk [label="Данное"]
+    getmilk -> get [label="Количество молока"]
+    archive -> getcloud [label="Данное"]
+    getcloud -> cloud [label="Количество пара"]
+    get -> cloud [style=dashed]
+    outsignal -> out
+    start -> get
 }
