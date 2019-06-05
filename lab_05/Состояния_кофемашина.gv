@@ -1,0 +1,15 @@
+digraph {
+    rankdir = LR
+
+    off [shape=box, label="1. Выкл."]
+    coffe [shape=box, label="2. Засыпка молотого кофе"]
+    water [shape=box, label="3. Пропуск горячей воды"]
+    milk [shape=box, label="4. Заливка молока"]
+
+    off -> coffe [label="C1 Сделать кофе"]
+    coffe -> water [label="C2 Налить кофе"]
+    water -> milk [label="C3 Добавить молоко в кофе"]
+    milk -> off [label="C4 Кофе с молоком готово"]
+    off -> water [label="C5 Налить воды"]
+    water -> off [label="C6 Кофе или вода готова"]
+}

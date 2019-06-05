@@ -1,0 +1,22 @@
+digraph {
+    archive [shape=box, label="Взбиватель молока"]
+    getmilk [label="Получить количество молока"]
+    get [label="Получение молока"]
+    cloud [label="Получение пара"]
+    shake [label="Взбив молока"]
+    signal [shape=none, label=""]
+    getcloud [label="Получить количества пара"]
+    outsignal [label="Подать сигнал, что молоко взбито"]
+    out [shape=none, label=""]
+    start [shape=none, label=""]
+
+    cloud -> shake [style=dashed]
+    shake -> outsignal [label="Молоко взбито"]
+    archive -> getmilk [label="Данное"]
+    getmilk -> get [label="Количество молока"]
+    archive -> getcloud [label="Данное"]
+    getcloud -> cloud [label="Количество пара"]
+    get -> cloud [style=dashed]
+    outsignal -> out
+    start -> get
+}

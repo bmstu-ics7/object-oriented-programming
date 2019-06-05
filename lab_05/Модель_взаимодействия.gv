@@ -1,0 +1,22 @@
+digraph {
+    user [shape=box, label="Пользователь"]
+    coffe [label="Кофемашина"]
+    water [label="Емкость для воды"]
+    hot [label="Нагреватель"]
+    mol [label="Кофемолка"]
+    milk [label="Взбиватель молока"]
+
+    user -> coffe [label="К1"]
+    user -> coffe [label="К2"]
+    user -> coffe [label="К2"]
+
+    coffe -> water [label="Е1"]
+    water -> hot [label="Н1"]
+
+    coffe -> milk [label="В1"]
+
+    coffe -> mol [label="КФ1"]
+
+    milk -> coffe [label="К3"]
+    coffe -> water [label="E2"]
+}

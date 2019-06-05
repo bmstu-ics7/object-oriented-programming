@@ -1,0 +1,9 @@
+digraph {
+    rankdir = LR
+
+    off [shape=box, label="1. Выкл."]
+    milk [shape=box, label="2. Взбив молока"]
+
+    off -> milk [label="M1 Запуск"]
+    milk -> off [label="M2 Молоко взбито"]
+}

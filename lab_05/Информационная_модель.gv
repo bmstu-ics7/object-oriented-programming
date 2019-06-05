@@ -1,0 +1,12 @@
+graph {
+    coffe [shape=box, label="1. Кофемашина (К)\n*Id Кофемашина\nId Кофемолка\nId Емкость для воды\nIdВзбиватель молока"];
+    mol [shape=box, label="2. Кофемолка (КМ)\n*Id Кофемолка"];
+    water [shape=box, label="3. Емкость для воды (Е)\n*Id Емкость для воды\nId Нагреватель"];
+    hot [shape=box, label="4. Нагреватель (Н)\n*Id Нагреватель"];
+    milk [shape=box, label="5. Взбиватель для молока (В)\n*Id Взбиватель для молока\nId Кофемашина"];
+
+    coffe -- mol [label="R12"];
+    coffe -- water [label="R13"];
+    coffe -- milk [label="R15 + R35"];
+    water -- hot [label="R14"];
+}
