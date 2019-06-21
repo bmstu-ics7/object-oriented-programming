@@ -50,7 +50,12 @@ compile_commands.json
 # QtCreator local machine specific files for imported projects
 *creator.user*
 
+# C++ in vscode
 .vscode
 *.out
 *.exe
+
+# C# in vs
+.vs
+obj
 
