@@ -3,20 +3,6 @@
 
 #include "point.h"
 #include "vector.h"
-/*
-struct Edge
-{
-    Point a;
-    Point b;
-};
-
-Edge createEdge(Point, Point);
-void drawEdge(Painter&, const Edge);
-void offsetEdge(Edge&, int, int, int);
-void scaleEdge(Edge&, const Point, double);
-void rotateEdge(Edge&, const Point, int, int, int);
-Point findCenterEdge(const Edge);
-*/
 
 struct Edge
 {
